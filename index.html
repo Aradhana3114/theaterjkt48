@@ -17,18 +17,16 @@
    brutal.css (brutal.css memakai !important)
    ================================================================ */
 
-/* --- Tombol setlist & filter tidak boleh segede layar -------------
-   brutal.css:2248-2252 mengubah .top-member-row / .filter-row jadi
-   1 kolom di <=380px, sehingga tiap tombol melebar penuh dan boros
-   tinggi layar HP. Yang dikehendaki: 2 kolom, tinggi compact, label
-   pendek. */
+/* --- Tombol filter ringkas & center di HP --------------------------
+   brutal.css:2246-2252 memakai grid 2 kolom + padding besar, sehingga
+   di HP tiap tombol boros tinggi dan baris terakhir menyisakan
+   setengah layar kosong ("Passion" sendirian di kolom kiri). Di sini
+   dirapikan: 1 tombol = 1 kolom penuh, 3 tombol = 3 kolom sebaris,
+   isi tombol rata tengah. */
 @media (max-width:600px){
-  .top-member-row,
   .filter-row{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
     gap:6px!important;
   }
-  .top-member-row>*,
   .filter-row>*{
     min-height:0!important;
     padding:7px 5px!important;
@@ -36,10 +34,19 @@
     line-height:1.2!important;
     letter-spacing:0!important;
     border-radius:6px!important;
+    text-align:center!important;
+    justify-self:center!important;
   }
-  .top-member-section{padding:10px 12px!important}
-  .top-member-title{font-size:9px!important;margin-bottom:6px!important}
   .filter-section-title{font-size:9px!important;margin-bottom:6px!important}
+
+  /* "CARI GENERASI": 1 tombol -> 1 kolom penuh, teks center. */
+  .filters .filter-section:first-child .filter-row{
+    grid-template-columns:1fr!important;
+  }
+  /* "FILTER TEAM": 3 tombol -> 3 kolom sebaris, groupnya rata. */
+  .filters .filter-section:last-child .filter-row{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
 }
 </style>
 </head>
@@ -97,15 +104,6 @@
 <div class="last-update" id="lastUpdate">
     <div class="spinner"></div>
     <span>Loading...</span>
-</div>
-<div class="top-member-section">
-    <div class="top-member-title">SETLIST PERFORMANCE</div>
-    <div class="top-member-row">
-        <button class="top-member-filter setlist-tte" onclick="showSetlist('tte')">Sambil Menggandeng Erat Tanganku</button>
-        <button class="top-member-filter setlist-ramune" onclick="showSetlist('ramune')">Cara Meminum Ramune</button>
-        <button class="top-member-filter setlist-pertaruhan" onclick="showSetlist('pertaruhan')">Pertaruhan Cinta</button>
-        <button class="top-member-filter setlist-pajama" onclick="showSetlist('pajama')">Pajama Drive</button>
-    </div>
 </div>
 <div class="filters">
     <div class="filter-section">
