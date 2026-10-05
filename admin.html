@@ -80,7 +80,20 @@
   touch-action:pan-y;
 }
 
-/* --- 3. Modal layar penuh di HP -------------------------------------
+/* --- 3. Halaman TIDAK bisa di-scroll dengan sentuhan di HP ----------
+   `overflow-x:hidden` membuat <body> menjadi SCROLL CONTAINER, dan
+   body juga punya `overscroll-behavior-y:contain` (admin.css:6).
+   Kombinasi itu membuat gestur jarik tertahan di <body> dan tidak
+   diteruskan (scroll chaining) ke viewport — hasilnya halaman diam
+   saja saat di-drag, padahal isinya panjang.
+
+   `overflow-x:clip` memotong overflow horizontal TANPA membuat
+   <body> jadi scroll container (lihat CSS Overflow 3), jadi <html>
+   tetap jadi satu-satunya scroller dan sentuhan normal lagi.
+   Verified: overflow-x:hidden -> scrollY 0; overflow-x:clip -> scrollY ~730 */
+html,body{overflow-x:hidden;overflow-x:clip}
+
+/* --- 4. Modal layar penuh di HP -------------------------------------
    Pakai dvh supaya tidak terpotong browser bar mobile, dan modal-box
    dibuat tinggi penuh layar supaya form panjang tetap terjangkau. */
 @media (max-width:700px){
