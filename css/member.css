@@ -1,0 +1,549 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',Arial,sans-serif;background:#f5f5f5;color:#333;min-height:100vh;padding:0;transition:background 0.3s,color 0.3s}
+body.dark{background:#0a0e1a;color:#e5e7eb}
+
+/* Header System */
+.main-header{position:fixed;top:0;left:0;right:0;z-index:1001;background:rgba(255,255,255,0.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 2px 16px rgba(0,0,0,0.08);}
+body.dark .main-header{background:rgba(17,24,39,0.88);border-color:#1f2937;box-shadow:0 2px 16px rgba(0,0,0,0.4)}
+
+/* Baris 1 - Background merah JKT48 SHOW THEATER */
+.header-top-bar{background:#e60012;text-align:center;padding:8px 20px;}
+.header-top-title{font-size:13px;font-weight:800;color:#fff;letter-spacing:1.2px;text-transform:uppercase;}
+
+/* Baris 2 - Navigasi */
+.detail-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(255,255,255,0.88);transition:background 0.3s,border-color 0.3s;position:relative}
+body.dark .detail-header{background:rgba(17,24,39,0.88);border-color:#1f2937}
+.back-btn{background:transparent;border:none;color:#333;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;padding:6px 0;transition:transform 0.18s cubic-bezier(0.34,1.56,0.64,1),opacity 0.2s;position:relative;z-index:1}
+body.dark .back-btn{color:#e5e7eb}
+.back-btn:hover{transform:translateX(-3px);opacity:0.85}
+.detail-title{
+  font-size:15px;
+  font-weight:bold;
+  color:#333;
+  text-align:center;
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  white-space:nowrap;
+}
+body.dark .detail-title{color:#e5e7eb}
+.header-controls{display:flex;align-items:center;gap:10px}
+
+/* =============================================
+   DEFAULT (mobile/portrait) — vertikal normal
+   ============================================= */
+
+.container{
+  max-width: 480px;
+  width: 100%;
+  margin: 110px auto 20px;
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+  transition: background 0.3s;
+  position: relative;
+}
+body.dark .container{background:transparent;box-shadow:none}
+
+/* container-header */
+.container-header{
+  background:var(--gen-color);
+  padding:12px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-radius:0;
+  margin-bottom:0;
+  position:relative;
+}
+.container-header .profile-title{
+  font-size:16px;
+  font-weight:bold;
+  color:#fff;
+  margin:0;
+}
+.container-header .show-history-btn{
+  background:rgba(255,255,255,0.2);
+  border:none;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px;
+  transition:all 0.3s;
+}
+.container-header .show-history-btn:hover{
+  background:rgba(255,255,255,0.3);
+  transform:scale(1.1);
+}
+.container-header .show-history-btn svg{
+  width:18px;
+  height:18px;
+  color:#fff;
+}
+
+/* main-content: default block (vertikal) */
+.main-content { display: block; }
+
+/* PANEL KIRI: default normal flow */
+.left-panel{
+  margin: 0 18px 24px;
+  background: transparent;
+}
+
+/* PANEL KANAN: default normal flow */
+.right-panel{
+  margin: 0 18px 24px;
+  background: transparent;
+}
+
+/* FOTO — default (mobile) */
+.photo-container{text-align:center;margin:20px 0 10px;position:relative}
+.photo{
+  width:110px;
+  height:154px;
+  object-fit:cover;
+  object-position:center top;
+  border-radius:0;
+  transition:all 0.3s;
+  display:block;
+  margin:0 auto;
+}
+body.dark .photo{background:#1a1a1a}
+.photo-error{
+  width:110px;height:154px;border-radius:0;
+  display:flex;align-items:center;justify-content:center;
+  background:#f5f5f5;color:#6b7280;font-weight:600;font-size:22px;margin:0 auto;
+}
+body.dark .photo-error{background:#1a1a1a;color:#9ca3af}
+
+.member-name{text-align:center;font-size:20px;font-weight:bold;color:#333;margin:10px 0 18px;line-height:1.3}
+body.dark .member-name{color:#e5e7eb}
+
+/* PANEL KIRI - title */
+.left-panel .panel-title{
+  font-size:12px;font-weight:bold;color:#333;
+  margin-bottom:8px;padding-bottom:6px;
+  border-bottom:2px solid #e60012;width:100%;flex-shrink:0;
+}
+body.dark .left-panel .panel-title{color:#e5e7eb;border-color:#ff3366}
+
+/* PROGRESS MILESTONE */
+.milestone-card{background:transparent;border:none;border-radius:0;padding:0;width:100%;flex-shrink:0}
+.milestone-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.milestone-title{font-size:9px;font-weight:600;color:#6b7280}
+body.dark .milestone-title{color:#9ca3af}
+.milestone-target{font-size:11px;font-weight:bold;color:var(--gen-color)}
+.progress-bar-container{height:12px;background:#e5e7eb;border-radius:6px;overflow:hidden;position:relative;margin-bottom:4px}
+body.dark .progress-bar-container{background:#374151}
+.progress-bar-fill{
+  height:100%;background:var(--gen-color);border-radius:6px;
+  transition:width 1s cubic-bezier(0.4,0,0.2,1);position:relative;overflow:hidden;
+}
+.progress-bar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.28) 50%,transparent 100%);animation:pgshimmer 1.8s infinite}
+@keyframes pgshimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.progress-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:8px;font-weight:600;color:#6b7280;z-index:10}
+body.dark .progress-text{color:#9ca3af}
+.progress-info{text-align:center;font-size:8px;color:#6b7280;font-weight:500}
+body.dark .progress-info{color:#9ca3af}
+
+/* PANEL KANAN - title */
+.right-panel .panel-title{
+  font-size:16px;
+  font-weight:bold;
+  color:#333;
+  margin-bottom:12px;
+  padding-bottom:8px;
+  border-bottom:2px solid #e60012;
+}
+body.dark .right-panel .panel-title{color:#e5e7eb;border-color:#ff3366}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 0;
+  border-bottom:1px solid #e5e7eb;
+}
+.info-row:last-child{border-bottom:none}
+body.dark .info-row{border-bottom-color:#374151}
+
+.info-label{
+  color:#6b7280;
+  font-size:12px;
+  font-weight:600;
+  flex-shrink:0;
+  width:90px;
+}
+body.dark .info-label{color:#9ca3af}
+.info-value{
+  color:#333;
+  font-size:12px;
+  font-weight:600;
+  text-align:right;
+  flex:1;
+}
+body.dark .info-value{color:#e5e7eb}
+
+/* SOCIAL MEDIA - Tanpa card */
+.social-section{
+  margin-top:16px;
+  background:transparent;
+}
+.social-title{
+  font-size:16px;
+  font-weight:bold;
+  color:#333;
+  margin-bottom:10px;
+  padding-bottom:8px;
+  border-bottom:2px solid #e60012;
+}
+body.dark .social-title{color:#e5e7eb;border-color:#ff3366}
+
+.social-link{
+  display:flex;
+  align-items:center;
+  padding:8px 0;
+  background:transparent;
+  border:none;
+  border-radius:0;
+  margin-bottom:4px;
+  text-decoration:none;
+  color:inherit;
+  transition:all 0.3s;
+  border-bottom:1px solid #e5e7eb;
+}
+.social-link:last-child{border-bottom:none}
+body.dark .social-link{border-color:#374151}
+.social-link:hover{transform:translateX(5px)}
+.social-icon{
+  width:36px;
+  height:36px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  background:transparent;
+  border:1px solid #e5e7eb;
+  transition:background 0.3s,border-color 0.3s;
+}
+body.dark .social-icon{background:transparent;border-color:#374151}
+.social-icon svg{width:18px;height:18px;color:#333}
+body.dark .social-icon svg{color:#e5e7eb}
+.social-info{flex:1;margin-left:10px}
+.social-name{
+  font-size:11px;
+  font-weight:bold;
+  color:#333;
+  margin-bottom:1px;
+}
+body.dark .social-name{color:#e5e7eb}
+.social-handle{
+  font-size:10px;
+  color:#6b7280;
+  font-weight:500;
+}
+body.dark .social-handle{color:#9ca3af}
+.social-arrow{
+  font-size:13px;
+  color:#333;
+  font-weight:bold;
+}
+body.dark .social-arrow{color:#e5e7eb}
+
+.empty-social{
+  text-align:center;
+  padding:12px;
+  color:#6b7280;
+  font-size:12px;
+  background:transparent;
+  border-radius:0;
+  border:1px dashed #e5e7eb;
+}
+body.dark .empty-social{background:transparent;color:#9ca3af;border-color:#374151}
+
+/* Footer - Menyatu dengan konten */
+.detail-footer{
+  text-align:center;
+  padding:12px;
+  color:#6b7280;
+  font-size:10px;
+  border-top:1px solid #e5e7eb;
+  margin-top:0;
+  width:100%;
+}
+body.dark .detail-footer{
+  color:#9ca3af;
+  border-top-color:#374151;
+}
+
+/* Skeleton Loading */
+.skeleton-loading{padding:20px;animation:skeleton-pulse 1.5s ease-in-out infinite}
+@keyframes skeleton-pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.skeleton-photo{
+  width:135px;
+  height:190px;
+  border-radius:0;
+  background:#e5e7eb;
+  margin:0 auto 12px;
+}
+body.dark .skeleton-photo{background:#374151}
+.skeleton-name{width:160px;height:24px;background:#e5e7eb;border-radius:6px;margin:0 auto 20px}
+body.dark .skeleton-name{background:#374151}
+.skeleton-info{width:100%;height:40px;background:#e5e7eb;border-radius:8px;margin-bottom:10px}
+body.dark .skeleton-info{background:#374151}
+.skeleton-info.small{width:80%;height:30px;margin:0 auto 10px}
+
+/* Toast Notification */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:#333;color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:500;z-index:1001;opacity:0;transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.success{background:#22c55e}
+.toast.error{background:#ef4444}
+
+.loading{text-align:center;padding:80px 20px;color:#6b7280;display:flex;align-items:center;justify-content:center;gap:8px}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:20px;height:20px;border:3px solid rgba(0,0,0,0.1);border-top-color:#9ca3af;border-radius:50%;animation:spin 0.8s linear infinite}
+body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
+
+/* =============================================
+   MOBILE (≤ 480px)
+   ============================================= */
+@media (max-width: 480px) {
+  .main-header{position:sticky;top:0}
+  .container{ max-width:100%; margin:0; }
+  .container-header{ padding:10px 14px; }
+  .container-header .profile-title{ font-size:14px; }
+  .container-header .show-history-btn{ width:30px;height:30px; }
+  .container-header .show-history-btn svg{ width:15px;height:15px; }
+  .left-panel, .right-panel{ margin:0 16px 20px; }
+  .member-name{ font-size:20px;margin:10px 0 16px; }
+  .left-panel .panel-title,.right-panel .panel-title,.social-title{ font-size:15px;margin-bottom:10px;padding-bottom:6px; }
+  .info-row{padding:8px 0}
+  .info-label{font-size:12px;width:90px}
+  .info-value{font-size:12px}
+  .milestone-target{font-size:13px}
+  .progress-bar-container{height:13px;border-radius:7px}
+  .progress-text{font-size:9px}
+  .progress-info{font-size:9px}
+  .social-icon{width:34px;height:34px;border-radius:8px}
+  .social-icon svg{width:17px;height:17px}
+  .social-name{font-size:12px}
+  .social-handle{font-size:10px}
+  .detail-header{padding:10px 14px}
+  .detail-title{font-size:14px}
+}
+
+/* =============================================
+   TABLET PORTRAIT (481px – 768px portrait)
+   ============================================= */
+@media (min-width:481px) and (max-width:768px) and (orientation:portrait) {
+  .main-header{position:sticky;top:0}
+  .container{ max-width:600px; margin:0 auto; }
+  .container-header{ padding:13px 22px; }
+  .container-header .profile-title{ font-size:16px; }
+  .left-panel, .right-panel{ margin:0 22px 22px; }
+  .photo,.photo-error{ width:150px;height:210px; }
+  .member-name{ font-size:22px; }
+  .info-label{font-size:13px;width:100px}
+  .info-value{font-size:13px}
+}
+
+/* =============================================
+   TABLET LANDSCAPE (601px – 1024px landscape)
+   Kiri: NON-SCROLL | Kanan: SCROLL | Full layar
+   ============================================= */
+@media (min-width:601px) and (max-width:1024px) and (orientation:landscape) {
+  html, body{ overflow:hidden !important; height:100vh !important; padding:0 !important; }
+  .main-header{ position:fixed !important; top:0;left:0;right:0;z-index:1001; }
+
+  .container{
+    position:fixed !important;
+    top:var(--site-header-h, 75px);
+    left:0;right:0;bottom:0;
+    max-width:100% !important;
+    width:100% !important;
+    margin:0 !important;
+    border-radius:0 !important;
+    overflow:hidden !important;
+    background:#fff !important;
+    box-shadow:none !important;
+    display:flex !important;
+    flex-direction:column !important;
+  }
+  body.dark .container{ background:rgba(17,24,39,0.88) !important; }
+
+  .container-header{ padding:11px 22px;flex-shrink:0; }
+  .container-header .profile-title{ font-size:15px; }
+
+  .main-content{
+    display:flex !important;
+    flex-direction:row !important;
+    flex:1;
+    min-height:0;
+    overflow:hidden;
+  }
+
+  /* Panel kiri: NON-SCROLL */
+  .left-panel{
+    width:240px !important;
+    min-width:240px !important;
+    height:100%;
+    overflow:hidden !important;
+    background:#f9fafb;
+    border-right:1px solid #e5e7eb;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    padding:18px 14px !important;
+    margin:0 !important;
+    flex-shrink:0;
+  }
+  body.dark .left-panel{ background:#0d1425;border-right-color:#374151; }
+
+  .photo-container{ margin:0 0 10px 0;flex-shrink:0; }
+  .photo,.photo-error{ width:115px;height:161px; }
+  .member-name{ font-size:14px;margin:6px 0 12px;flex-shrink:0; }
+  .left-panel .panel-title{ font-size:12px;margin-bottom:8px;padding-bottom:6px;width:100%;flex-shrink:0; }
+  .milestone-card{ width:100%;flex-shrink:0; }
+  .milestone-title{ font-size:9px; }
+  .milestone-target{ font-size:12px; }
+  .progress-bar-container{ height:11px;margin-bottom:5px; }
+  .progress-text{ font-size:8px; }
+  .progress-info{ font-size:8px; }
+
+  /* Panel kanan: SCROLL */
+  .right-panel{
+    flex:1 !important;
+    min-width:0;
+    height:100%;
+    overflow-y:auto !important;
+    overflow-x:hidden;
+    background:rgba(255,255,255,0.88);
+    padding:18px 22px !important;
+    margin:0 !important;
+    -webkit-overflow-scrolling:touch;
+  }
+  body.dark .right-panel{ background:rgba(17,24,39,0.88); }
+  .right-panel .panel-title{ font-size:15px;margin-bottom:12px; }
+  .info-row{ padding:8px 0; }
+  .info-label{ font-size:12px;width:105px; }
+  .info-value{ font-size:12px; }
+  .social-icon{ width:34px;height:34px;border-radius:8px; }
+  .social-name{ font-size:12px; }
+  .social-handle{ font-size:10px; }
+}
+
+/* =============================================
+   DESKTOP (≥ 1025px)
+   Kiri: NON-SCROLL | Kanan: SCROLL | Full layar
+   ============================================= */
+@media (min-width:1025px) {
+  html, body{ overflow:hidden !important; height:100vh !important; padding:0 !important; }
+  .main-header{ position:fixed !important; top:0;left:0;right:0;z-index:1001; }
+  .header-top-bar{ padding:8px 40px; }
+  .header-top-title{ font-size:15px; }
+  .detail-header{ background:rgba(255,255,255,0.88);padding:14px 40px; }
+  body.dark .detail-header{ background:rgba(17,24,39,0.88) !important;border-color:#1f2937 !important; }
+  .back-btn{ font-size:16px; }
+  .detail-title{ font-size:18px; }
+
+  .container{
+    position:fixed !important;
+    top:var(--site-header-h, 75px);
+    left:0;right:0;bottom:0;
+    max-width:100% !important;
+    width:100% !important;
+    margin:0 !important;
+    border-radius:0 !important;
+    overflow:hidden !important;
+    background:#fff !important;
+    box-shadow:none !important;
+    display:flex !important;
+    flex-direction:column !important;
+  }
+  body.dark .container{ background:rgba(17,24,39,0.88) !important; }
+
+  .container-header{ padding:15px 40px;flex-shrink:0; }
+  .container-header .profile-title{ font-size:20px; }
+  .container-header .show-history-btn{ width:42px;height:42px; }
+  .container-header .show-history-btn svg{ width:20px;height:20px; }
+
+  .main-content{
+    display:flex !important;
+    flex-direction:row !important;
+    flex:1;
+    min-height:0;
+    overflow:hidden;
+  }
+
+  /* Panel kiri: NON-SCROLL */
+  .left-panel{
+    width:320px !important;
+    min-width:320px !important;
+    height:100%;
+    overflow:hidden !important;
+    background:#f9fafb;
+    border-right:1px solid #e5e7eb;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    padding:36px 28px !important;
+    margin:0 !important;
+    flex-shrink:0;
+  }
+  body.dark .left-panel{ background:#0d1425;border-right-color:#374151; }
+
+  .photo-container{ margin:0 0 14px 0;flex-shrink:0; }
+  .photo,.photo-error{ width:155px;height:216px; }
+  .member-name{ font-size:21px;margin:10px 0 22px;flex-shrink:0; }
+  .left-panel .panel-title{ font-size:17px;margin-bottom:14px;padding-bottom:10px;width:100%;flex-shrink:0; }
+  .milestone-card{ width:100%;flex-shrink:0; }
+  .milestone-title{ font-size:12px; }
+  .milestone-target{ font-size:15px; }
+  .progress-bar-container{ height:16px;border-radius:8px;margin-bottom:7px; }
+  .progress-text{ font-size:10px; }
+  .progress-info{ font-size:10px; }
+
+  /* Panel kanan: SCROLL */
+  .right-panel{
+    flex:1 !important;
+    min-width:0;
+    height:100%;
+    overflow-y:auto !important;
+    overflow-x:hidden;
+    background:rgba(255,255,255,0.88);
+    padding:36px 48px !important;
+    margin:0 !important;
+    -webkit-overflow-scrolling:touch;
+  }
+  body.dark .right-panel{ background:rgba(17,24,39,0.88); }
+  .right-panel .panel-title{ font-size:20px;margin-bottom:18px;padding-bottom:12px; }
+  .info-row{ padding:13px 0; }
+  .info-label{ font-size:14px;width:135px; }
+  .info-value{ font-size:14px; }
+  .social-section{ margin-top:24px; }
+  .social-title{ font-size:20px;margin-bottom:14px;padding-bottom:12px; }
+  .social-link{ padding:11px 0; }
+  .social-icon{ width:42px;height:42px;border-radius:11px; }
+  .social-icon svg{ width:20px;height:20px; }
+  .social-name{ font-size:14px; }
+  .social-handle{ font-size:12px; }
+  .social-arrow{ font-size:16px; }
+}
+/* Skeleton dark mode */
+body.dark .skeleton-header,
+body.dark .skeleton-footer,
+body.dark .skeleton-photo,
+body.dark .skeleton-name,
+body.dark .skeleton-info,
+body.dark .skeleton-left {
+    background: #1f2937;
+    border-color: #374151;
+}

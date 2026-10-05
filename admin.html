@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="img/favicon-theater-jkt48.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - JKT48 Show Theater</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.107.0" onerror="window.__supabaseLoadFailed=true"></script>
+<script src="js/admin-loader.js"></script>
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/brutal.css">
+</head>
+<body class="dark">
+
+<!-- Login Splash Animation -->
+<div id="loginSplash">
+  <div class="splash-rings">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+  </div>
+  <div class="splash-logo">
+    <div class="logo-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    </div>
+    <div class="splash-title">JKT48</div>
+    <div class="splash-sub">Show Theater Admin</div>
+  </div>
+  <div class="splash-dots">
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+  </div>
+</div>
+
+<header>
+  <div class="header-left">
+    <span class="header-title">JKT48 SHOW THEATER</span>
+    <span class="admin-badge">ADMIN</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+
+    <button class="header-logout-btn" onclick="logout()" title="Logout">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<div class="top">
+    <div class="search-box">
+        <!-- Search icon (kaca pembesar) -->
+        <span class="search-icon" id="searchIconSpan">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+        </span>
+        <input type="text" id="searchInput" placeholder="Cari member..." oninput="searchMember(); toggleClearBtn()">
+        <button class="search-clear-btn" id="searchClear" onclick="clearSearch()" title="Hapus pencarian">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+    <div class="top-actions">
+        <button class="bulk-btn" onclick="openBulkAddModal()">Bulk Add</button>
+        <button style="background:#3b82f6;color:#fff;" onclick="openEditShowListModal()">Edit Show</button>
+        <button style="background:#ef4444;color:#fff;" onclick="openDeleteShowModal()">Hapus Show</button>
+        <button style="background:#dc2626;color:#fff;" onclick="openResignModal()">Resign</button>
+    </div>
+</div>
+
+<div class="activity-section"><div class="activity-header"><div class="activity-title">Activity Log</div><button class="clear-log-btn" onclick="clearActivityLog()">Clear</button></div><div class="activity-log" id="activityLog"><div class="activity-empty">Belum ada aktivitas hari ini</div></div></div>
+<div class="filters">
+    <button class="filter all active" onclick="filterType('all')">ALL</button>
+    <button class="filter inti" onclick="filterType('inti')">INTI</button>
+    <button class="filter trainee" onclick="filterType('trainee')">TRAINEE</button>
+    <button class="filter" onclick="filterGen(3)" style="background:#ec4899;color:#fff">Gen 3</button>
+    <button class="filter" onclick="filterGen(6)" style="background:#22c55e;color:#fff">Gen 6</button>
+    <button class="filter" onclick="filterGen(7)" style="background:#15803d;color:#fff">Gen 7</button>
+    <button class="filter" onclick="filterGen(8)" style="background:#1e40af;color:#fff">Gen 8</button>
+    <button class="filter" onclick="filterGen(9)" style="background:#06b6d4;color:#fff">Gen 9</button>
+    <button class="filter" onclick="filterGen(10)" style="background:#38bdf8;color:#fff">Gen 10</button>
+    <button class="filter" onclick="filterGen(11)" style="background:#f97316;color:#fff">Gen 11</button>
+    <button class="filter" onclick="filterGen(12)" style="background:#fde68a;color:#000">Gen 12</button>
+    <button class="filter" onclick="filterGen(13)" style="background:#facc15;color:#000">Gen 13</button>
+    <button class="filter" onclick="filterGen(14)" style="background:#e879f9;color:#fff">Gen 14</button>
+</div>
+<div class="stats" id="stats"></div>
+<div class="container" id="list"><div class="loading"><div class="spinner"></div><span>Loading data...</span></div></div>
+
+<!-- Notification Container -->
+<div class="notification" id="notificationContainer"></div>
+
+<!-- Login Modal -->
+<div class="modal" id="loginModal">
+  <!-- Desktop: two-panel card -->
+  <div class="login-desktop-card">
+
+    <!-- LEFT: Info Panel -->
+    <div class="login-left-panel">
+      <div class="login-left-inner">
+
+        <!-- Top: Brand -->
+        <div class="login-brand">
+          <div class="login-brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div>
+            <div class="login-brand-name">JKT48</div>
+            <div class="login-brand-sub">Show Theater Admin</div>
+          </div>
+        </div>
+
+        <!-- Hero block -->
+        <div class="login-hero-block">
+          <!-- Big icon -->
+          <div class="login-hero-icon-wrap">
+            <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+              <line x1="9" y1="15" x2="13" y2="15"/>
+              <line x1="9" y1="19" x2="15" y2="19"/>
+            </svg>
+          </div>
+
+          <!-- Tagline -->
+          <div class="login-tagline">
+            Manajemen<br>Show &amp; Member<br><span>JKT48 Theater</span>
+          </div>
+          <div class="login-tagline-sub">
+            Platform admin terpusat untuk mengelola data show, member, setlist, dan aktivitas theater JKT48 secara real-time.
+          </div>
+
+          <!-- Feature grid 2 kolom -->
+          <div class="login-features">
+            <div class="login-feature-item">
+              <div class="login-feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div>
+                <div class="login-feature-title">Kelola Show</div>
+                <div class="login-feature-desc">Tambah, edit &amp; hapus data show per member</div>
+              </div>
+            </div>
+            <div class="login-feature-item">
+              <div class="login-feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+              </div>
+              <div>
+                <div class="login-feature-title">Bulk Add</div>
+                <div class="login-feature-desc">Input banyak member dalam satu operasi</div>
+              </div>
+            </div>
+            <div class="login-feature-item">
+              <div class="login-feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div>
+                <div class="login-feature-title">Activity Log</div>
+                <div class="login-feature-desc">Pantau semua perubahan secara real-time</div>
+              </div>
+            </div>
+            <div class="login-feature-item">
+              <div class="login-feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </div>
+              <div>
+                <div class="login-feature-title">Birthday &amp; Graduation</div>
+                <div class="login-feature-desc">Tandai show spesial member</div>
+              </div>
+            </div>
+            <div class="login-feature-item">
+              <div class="login-feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </div>
+              <div>
+                <div class="login-feature-title">Filter &amp; Cari</div>
+                <div class="login-feature-desc">Cari member berdasarkan gen &amp; status</div>
+              </div>
+            </div>
+            <div class="login-feature-item">
+              <div class="login-feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              </div>
+              <div>
+                <div class="login-feature-title">Supabase DB</div>
+                <div class="login-feature-desc">Data tersimpan aman &amp; terenkripsi</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats strip -->
+        <div class="login-stats-strip">
+          <div class="login-stat">
+            <div class="login-stat-num" id="loginStatMembers">—</div>
+            <div class="login-stat-label">Member Aktif</div>
+          </div>
+          <div class="login-stat-divider"></div>
+          <div class="login-stat">
+            <div class="login-stat-num" id="loginStatGen">14</div>
+            <div class="login-stat-label">Generasi</div>
+          </div>
+          <div class="login-stat-divider"></div>
+          <div class="login-stat">
+            <div class="login-stat-num">Real-time</div>
+            <div class="login-stat-label">Supabase DB</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Decorative elements -->
+      <div class="login-deco-circle login-deco-1"></div>
+      <div class="login-deco-circle login-deco-2"></div>
+      <div class="login-deco-circle login-deco-3"></div>
+      <div class="login-deco-circle login-deco-4"></div>
+      <!-- Dot grid -->
+      <div class="login-dot-grid">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <!-- RIGHT: Login Form -->
+    <div class="login-right-panel">
+
+      <div class="login-form-wrap">
+        <div class="login-form-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h3 class="login-form-title">Selamat Datang</h3>
+        <p class="login-form-sub">Masukkan kredensial admin untuk melanjutkan</p>
+
+        <label class="input-label">Email</label>
+        <input id="email" type="email" placeholder="Masukan email">
+        <label class="input-label">Password</label>
+        <div style="position:relative;margin-bottom:10px;">
+          <input id="password" type="password" placeholder="Masukkan password" style="margin-bottom:0;padding-right:44px;width:100%;">
+          <button type="button" onclick="togglePasswordVisibility()" id="eyeBtn" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:transparent;border:none;cursor:pointer;padding:4px;color:#9ca3af;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:color 0.2s;" title="Tampilkan/sembunyikan password">
+            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="error" id="errorMsg"></div>
+        <button onclick="login()" class="login-submit-btn" id="loginBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Masuk
+        </button>
+
+        <div class="login-footer-note">© 2026 JKT48 Show Theater. Admin only.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Logout Modal -->
+<div class="modal" id="logoutModal">
+  <div class="modal-box" style="text-align:center;max-width:340px;">
+    <div style="width:64px;height:64px;background:#fee2e2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+    </div>
+    <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">Keluar dari Admin Panel?</h3>
+    <p style="font-size:13px;color:#6b7280;line-height:1.6;margin-bottom:24px;">Sesi kamu akan berakhir dan kamu perlu login kembali untuk mengakses fitur admin.</p>
+    <div class="modal-buttons" style="gap:10px;">
+      <button class="btn-cancel" onclick="closeLogoutModal()" style="flex:1;padding:12px;font-size:14px;border-radius:12px;">Batal</button>
+      <button onclick="confirmLogout()" style="flex:1;padding:12px;font-size:14px;border-radius:12px;background:#ef4444;color:#fff;font-weight:700;">Logout</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Show Modal -->
+<div class="modal" id="confirmDeleteModal">
+  <div class="modal-box" style="text-align:center;max-width:340px;">
+    <div style="width:64px;height:64px;background:#fee2e2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        <path d="M10 11v6"/><path d="M14 11v6"/>
+        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+      </svg>
+    </div>
+    <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Hapus Show?</h3>
+    <div id="confirmDeleteDesc"></div>
+    <div class="modal-buttons" style="gap:10px;">
+      <button class="btn-cancel" onclick="closeConfirmDeleteModal()" style="flex:1;padding:12px;font-size:14px;border-radius:12px;">Batal</button>
+      <button id="confirmDeleteBtn" style="flex:1;padding:12px;font-size:14px;border-radius:12px;background:#ef4444;color:#fff;font-weight:700;">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- Resign Modal (Pengunduran Diri dengan tanggal efektif) -->
+<div class="modal" id="resignModal">
+  <div class="modal-box" style="max-width:400px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <div style="width:44px;height:44px;background:#fee2e2;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+      <div>
+        <h3 style="font-size:17px;font-weight:700;margin:0;">Resign Member</h3>
+        <div style="font-size:12px;color:#9ca3af;">Pengunduran diri tanpa show terakhir</div>
+      </div>
+    </div>
+
+    <label class="input-label">Pilih Member</label>
+    <select id="resignMemberSelect" onchange="onResignMemberChange()" style="margin-bottom:12px;">
+      <option value="">-- Pilih Member --</option>
+    </select>
+
+    <div id="resignDateSection">
+      <label class="input-label">Efektif Mulai Tanggal</label>
+      <input type="date" id="resignEffectiveDate" style="margin-bottom:4px;">
+      <div class="tip-text"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;margin-right:5px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Member tetap aktif normal sampai tanggal ini tiba. Setelah lewat, otomatis terkunci &amp; hilang dari daftar publik.</div>
+    </div>
+
+    <div id="resignAlreadySetInfo" style="display:none;background:#fef2f2;color:#b91c1c;border-radius:8px;padding:10px 12px;font-size:12px;margin-top:10px;"></div>
+
+    <div class="modal-buttons" style="gap:10px;margin-top:16px;">
+      <button class="btn-cancel" onclick="closeResignModal()" style="flex:1;padding:12px;font-size:14px;border-radius:12px;">Tutup</button>
+      <button id="resignCancelBtn" onclick="cancelResignForSelected()" style="display:none;flex:1;padding:12px;font-size:14px;border-radius:12px;background:#6b7280;color:#fff;font-weight:700;">Batalkan Resign</button>
+      <button id="resignSaveBtn" onclick="saveResignForSelected()" style="flex:1;padding:12px;font-size:14px;border-radius:12px;background:#dc2626;color:#fff;font-weight:700;">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="setlistModal">
+  <div class="modal-box">
+
+    <!-- Scrollable body -->
+    <div class="modal-body">
+      <div class="modal-header-block">
+        <h3 style="display:flex;align-items:center;gap:8px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:#e60012"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="15" x2="13" y2="15"/></svg>
+          Tambah Show
+        </h3>
+        <p id="setlistMemberName">Member: -</p>
+      </div>
+
+      <!-- Tanggal & Jam — 2 kolom -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="input-label">Tanggal Show</label>
+          <input type="date" id="showDate">
+        </div>
+        <div class="form-group">
+          <label class="input-label">Jam Show</label>
+          <input type="time" id="showTime" placeholder="19:00">
+        </div>
+      </div>
+
+      <!-- Setlist -->
+      <label class="input-label">Pilih Setlist</label>
+      <select id="setlistSelect" onchange="toggleCustomSetlistField()">
+        <option value="">Pilih Setlist...</option>
+        <option value="__custom__">Kustom Setlist (Ketik Manual)</option>
+      </select>
+      <div class="custom-setlist-field" id="customSetlistField">
+        <label class="input-label">Nama Setlist Kustom</label>
+        <input type="text" id="customSetlistName" placeholder="Masukkan nama setlist..." maxlength="100">
+        <div class="tip-text"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;margin-right:5px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Masukkan nama setlist bebas sesuai keinginan</div>
+      </div>
+      <div class="setlist-info" id="setlistInfo" style="display:none">
+        <span class="setlist-badge">INFO</span>
+        <span id="setlistDescription"></span>
+      </div>
+
+      <div class="modal-divider"></div>
+
+      <!-- Options: Birthday / Graduation / Non-Show -->
+      <div class="options-grid">
+
+        <!-- Birthday -->
+        <div class="option-card birthday-card" id="setlist-birthday-card">
+          <label class="option-card-row">
+            <input type="checkbox" id="isBirthdayShow" onchange="toggleBirthdayField()">
+            <span class="option-label" style="display:flex;align-items:center;gap:7px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h0.01"/><path d="M12 4h0.01"/><path d="M17 4h0.01"/></svg>
+              Birthday Show (STS)
+            </span>
+          </label>
+          <div class="option-dropdown" id="birthdayMemberField">
+            <select id="birthdayMember">
+              <option value="">-- Pilih Member --</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Graduation -->
+        <div class="option-card graduation-card" id="setlist-graduation-card">
+          <label class="option-card-row">
+            <input type="checkbox" id="isGraduationShow" onchange="toggleGraduationField()">
+            <span class="option-label" style="display:flex;align-items:center;gap:7px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              Graduation Show (Last Show)
+            </span>
+          </label>
+          <div class="option-dropdown" id="graduationMemberField">
+            <div class="option-warning" style="background:#dbeafe;color:#1e40af;display:flex;align-items:flex-start;gap:6px;border-radius:8px;padding:7px 10px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span><strong>PERHATIAN:</strong> Ini adalah SHOW TERAKHIR member. Setelah graduation tidak bisa ditambah show lagi.</span>
+            </div>
+            <select id="graduationMember">
+              <option value="">-- Pilih Member --</option>
+            </select>
+            <div class="option-warning" style="color:#dc2626;padding-left:0;display:flex;align-items:center;gap:5px;font-size:11px;margin-top:4px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Pastikan member ini benar-benar akan graduate. Aksi ini tidak dapat dibatalkan!
+            </div>
+          </div>
+        </div>
+
+        <!-- Non-Show Activity -->
+        <div class="option-card nonshow-card" id="setlist-nonshow-card">
+          <label class="option-card-row">
+            <input type="checkbox" id="isNonShowActivity" onchange="toggleSetlistNonShow()">
+            <span class="option-label" style="display:flex;align-items:center;gap:7px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Non-Show Activity (Ramadhan, dll)
+            </span>
+          </label>
+          <div class="option-dropdown" id="setlistNonShowInfo">
+            <div class="option-warning" style="background:#dcfce7;color:#166534;display:flex;align-items:flex-start;gap:6px;border-radius:8px;padding:7px 10px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span>Aktivitas non-show akan dicatat sebagai kegiatan khusus (Ramadhan, event, dll). Tidak menambah hitungan show member.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schedule Kosong -->
+        <div class="option-card" style="background:#f5f3ff;border-color:#ddd6fe;" id="setlist-empty-card">
+          <label class="option-card-row">
+            <input type="checkbox" id="isEmptySchedule" onchange="toggleSetlistEmptySchedule()">
+            <span class="option-label" style="display:flex;align-items:center;gap:7px;color:#6d28d9;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+              Schedule Kosong (Tanpa Member)
+            </span>
+          </label>
+          <div class="option-dropdown" id="setlistEmptyInfo">
+            <div class="option-warning" style="background:#ede9fe;color:#6d28d9;display:flex;align-items:flex-start;gap:6px;border-radius:8px;padding:7px 10px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span>Show akan dibuat tanpa member. Member bisa ditambah nanti lewat Edit Show.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <!-- Sticky footer — identik Bulk Add -->
+    <div class="modal-footer" id="setlistFooter">
+      <button class="btn-cancel" onclick="closeSetlistModal()">Batal</button>
+      <button class="btn-add" onclick="addShowWithSetlist()">Tambah Show</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Bulk Add Modal -->
+<div class="modal" id="bulkAddModal">
+  <div class="modal-box">
+
+    <!-- Scrollable body -->
+    <div class="modal-body">
+      <div class="modal-header-block">
+        <h3 style="display:flex;align-items:center;gap:8px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:#e60012"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+          Bulk Add Show
+        </h3>
+        <p>Tambahkan beberapa member sekaligus dalam 1 setlist</p>
+      </div>
+
+      <!-- Tanggal & Jam — 2 kolom -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="input-label">Tanggal Show</label>
+          <input type="date" id="bulkShowDate">
+        </div>
+        <div class="form-group">
+          <label class="input-label">Jam Show</label>
+          <input type="time" id="bulkShowTime" placeholder="19:00">
+        </div>
+      </div>
+
+      <!-- Setlist -->
+      <label class="input-label">Pilih Setlist</label>
+      <select id="bulkSetlistSelect" onchange="toggleBulkCustomSetlistField()">
+        <option value="">Pilih Setlist...</option>
+        <option value="__custom__">Kustom Setlist (Ketik Manual)</option>
+      </select>
+      <div class="custom-setlist-field" id="bulkCustomSetlistField">
+        <label class="input-label">Nama Setlist Kustom</label>
+        <input type="text" id="bulkCustomSetlistName" placeholder="Masukkan nama setlist..." maxlength="100">
+      </div>
+
+      <div class="modal-divider"></div>
+
+      <!-- Options: Birthday / Graduation / Non-Show -->
+      <div class="options-grid">
+
+        <!-- Birthday -->
+        <div class="option-card birthday-card">
+          <label class="option-card-row">
+            <input type="checkbox" id="bulkIsBirthdayShow" onchange="toggleBulkBirthdayField()">
+            <span class="option-label" style="display:flex;align-items:center;gap:7px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h0.01"/><path d="M12 4h0.01"/><path d="M17 4h0.01"/></svg>
+                Birthday Show (STS)
+            </span>
+          </label>
+          <div class="option-dropdown" id="bulkBirthdayMemberField">
+            <select id="bulkBirthdayMember">
+              <option value="">-- Pilih Member --</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Graduation -->
+        <div class="option-card graduation-card">
+          <label class="option-card-row">
+            <input type="checkbox" id="bulkIsGraduationShow" onchange="toggleBulkGraduationField()">
+            <span class="option-label" style="display:flex;align-items:center;gap:7px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                Graduation Show (Last Show)
+            </span>
+          </label>
+          <div class="option-dropdown" id="bulkGraduationMemberField">
+            <div class="option-warning" style="background:#dbeafe;color:#1e40af;display:flex;align-items:flex-start;gap:6px;border-radius:8px;padding:7px 10px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>Hanya 1 member yang bisa graduate per bulk operation!</span>
+            </div>
+            <select id="bulkGraduationMember">
+              <option value="">-- Pilih Member --</option>
+            </select>
+            <div class="option-warning" style="color:#dc2626;padding-left:0;display:flex;align-items:center;gap:5px;font-size:11px;margin-top:4px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Member lain tetap normal.
+            </div>
+          </div>
+        </div>
+
+        <!-- Non-Show Activity -->
+        <div class="option-card nonshow-card">
+          <label class="option-card-row">
+            <input type="checkbox" id="bulkIsNonShowActivity" onchange="toggleBulkNonShow()">
+            <span class="option-label" style="display:flex;align-items:center;gap:7px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Non-Show Activity (Ramadhan, dll)
+            </span>
+          </label>
+          <div class="option-dropdown" id="bulkNonShowInfo">
+            <div class="option-warning" style="background:#dcfce7;color:#166534;display:flex;align-items:flex-start;gap:6px;border-radius:8px;padding:7px 10px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span>Aktivitas non-show tidak menambah hitungan show member. Cocok untuk Ramadhan, event, dll.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schedule Kosong -->
+        <div class="option-card" style="background:#f5f3ff;border-color:#ddd6fe;">
+          <label class="option-card-row">
+            <input type="checkbox" id="bulkIsEmptySchedule" onchange="toggleBulkEmptySchedule()">
+            <span class="option-label" style="display:flex;align-items:center;gap:7px;color:#6d28d9;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+              Schedule Kosong (Tanpa Member)
+            </span>
+          </label>
+          <div class="option-dropdown" id="bulkEmptyScheduleInfo">
+            <div class="option-warning" style="background:#ede9fe;color:#6d28d9;display:flex;align-items:flex-start;gap:6px;border-radius:8px;padding:7px 10px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span>Show dibuat tanpa member. Member bisa ditambah nanti lewat Edit Show. Input member di bawah akan diabaikan.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Member Names -->
+      <div id="bulkMemberSection">
+        <label class="input-label">Nama Member <span style="font-weight:400;color:#9ca3af;">(pisahkan dengan koma)</span></label>
+        <div class="team-select-label">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Pilih berdasarkan team
+        </div>
+        <div class="team-select-row">
+          <button type="button" class="team-btn team-btn-love" id="teamBtnLove" onclick="selectTeamMembers('Love')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/></svg>
+            Team Love
+          </button>
+          <button type="button" class="team-btn team-btn-dream" id="teamBtnDream" onclick="selectTeamMembers('Dream')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            Team Dream
+          </button>
+          <button type="button" class="team-btn team-btn-passion" id="teamBtnPassion" onclick="selectTeamMembers('Passion')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Team Passion
+          </button>
+        </div>
+        <textarea class="member-textarea" id="bulkMemberNames" placeholder="Contoh: Cynthia, Danella, Eli, Elin, Ella, Fritzy, Indah, Kimmy"></textarea>
+        <div class="tip-text" style="margin-top:6px;"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;margin-right:5px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Nama harus persis sama dengan database (tidak case sensitive)</div>
+      </div>
+    </div>
+
+    <!-- Sticky footer buttons -->
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeBulkAddModal()">Batal</button>
+      <button class="btn-add" id="bulkAddBtn" onclick="bulkAddShows()" style="display:flex;align-items:center;justify-content:center;gap:7px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Tambah Semua
+      </button>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<!-- Member Show List Modal -->
+<div class="modal" id="memberShowListModal">
+  <div class="modal-box">
+    <div class="modal-body">
+      <div class="modal-header-block">
+        <h3>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit Show
+        </h3>
+        <p id="mslSubtitle">Pilih show yang ingin diedit</p>
+      </div>
+      <div id="mslList" class="msl-list">
+        <div class="msl-loading"><div class="spinner" style="width:18px;height:18px;border-width:2px;"></div> Memuat...</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeMemberShowList()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Show List Modal -->
+<div class="modal" id="editShowListModal">
+  <div class="modal-box">
+    <div class="modal-body">
+      <div class="modal-header-block">
+        <h3 style="color:#3b82f6;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit Show
+        </h3>
+        <p>Pilih show yang ingin diedit</p>
+      </div>
+      <div id="eslList" class="msl-list">
+        <div class="msl-loading"><div class="spinner" style="width:18px;height:18px;border-width:2px;border-top-color:#3b82f6;"></div> Memuat show...</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeEditShowListModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Edit Show Modal -->
+<div class="modal" id="confirmEslModal">
+  <div class="modal-box" style="max-width:420px;">
+    <div class="modal-body-scroll">
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="width:56px;height:56px;background:#dbeafe;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </div>
+        <h3 style="font-size:16px;font-weight:700;margin-bottom:4px;">Edit Show Ini</h3>
+        <p id="confirmEslDesc" style="font-size:13px;color:#6b7280;margin-bottom:12px;"></p>
+      </div>
+
+      <!-- Edit info show -->
+      <div>
+        <label class="input-label">Nama Setlist</label>
+        <select id="eslSetlistSelect" onchange="eslToggleCustomSetlist()" style="width:100%;padding:12px;border-radius:12px;border:2px solid #374151;background:#0a0e1a;color:#e5e7eb;font-size:14px;outline:none;margin-bottom:10px;">
+          <option value="">Pilih Setlist...</option>
+          <option value="__custom__">Kustom Setlist (Ketik Manual)</option>
+        </select>
+        <div class="custom-setlist-field" id="eslCustomSetlistField">
+          <label class="input-label">Nama Setlist Kustom</label>
+          <input type="text" id="eslSetlistName" placeholder="Masukkan nama setlist..." maxlength="100">
+          <div class="tip-text"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;margin-right:5px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Masukkan nama setlist bebas sesuai keinginan</div>
+        </div>
+        <label class="input-label">Tanggal Show</label>
+        <input type="date" id="eslShowDate">
+        <label class="input-label">Waktu Show</label>
+        <input type="time" id="eslShowTime">
+      </div>
+
+      <!-- Birthday & Graduation -->
+      <div style="height:1px;background:#1f2937;margin:14px 0;"></div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:4px;">
+
+        <!-- Birthday -->
+        <div style="padding:12px 14px;border-radius:12px;border:1.5px solid #7f1d1d;background:#1f1818;">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+            <input type="checkbox" id="eslIsBirthdayShow" onchange="eslToggleBirthday()" style="width:18px;height:18px;cursor:pointer;margin:0;accent-color:#e60012;flex-shrink:0;">
+            <span style="font-size:13px;font-weight:600;color:#fca5a5;display:flex;align-items:center;gap:7px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h0.01"/><path d="M12 4h0.01"/><path d="M17 4h0.01"/></svg>
+              Birthday Show (STS)
+            </span>
+          </label>
+          <div id="eslBirthdayMemberField" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);">
+            <select id="eslBirthdayMember" style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #374151;background:#0a0e1a;color:#e5e7eb;font-size:13px;outline:none;margin:0;"><option value="">-- Pilih Member --</option></select>
+          </div>
+        </div>
+
+        <!-- Graduation -->
+        <div style="padding:12px 14px;border-radius:12px;border:1.5px solid #1e3a8a;background:#1a1f2e;">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+            <input type="checkbox" id="eslIsGraduationShow" onchange="eslToggleGraduation()" style="width:18px;height:18px;cursor:pointer;margin:0;accent-color:#3b82f6;flex-shrink:0;">
+            <span style="font-size:13px;font-weight:600;color:#93c5fd;display:flex;align-items:center;gap:7px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              Graduation Show (Last Show)
+            </span>
+          </label>
+          <div id="eslGraduationMemberField" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);">
+            <div style="background:rgba(30,58,138,0.5);color:#93c5fd;display:flex;align-items:flex-start;gap:6px;border-radius:8px;padding:7px 10px;font-size:12px;margin-bottom:8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span><strong>PERHATIAN:</strong> Centang jika ini show terakhir member!</span>
+            </div>
+            <select id="eslGraduationMember" style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #374151;background:#0a0e1a;color:#e5e7eb;font-size:13px;outline:none;margin:0;"><option value="">-- Pilih Member --</option></select>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Edit Member Section -->
+      <div style="margin-top:16px;" id="eslMemberSection">
+        <div style="font-size:12px;font-weight:700;color:#6b7280;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">Member di Show Ini</div>
+        <div id="confirmEslMembers" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;min-height:28px;"></div>
+        <label class="input-label">Tambah Member <span style="font-weight:400;color:#9ca3af;">(pisahkan dengan koma)</span></label>
+        <textarea id="eslAddMemberTextarea" placeholder="Contoh: Cynthia, Danella, Eli, Kimmy" style="width:100%;min-height:70px;max-height:110px;resize:vertical;padding:10px 12px;border-radius:12px;border:1.5px solid #ddd;background:#fff;color:#333;font-size:13px;font-family:Arial,sans-serif;outline:none;transition:border-color 0.2s;display:block;margin-bottom:6px;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#ddd'"></textarea>
+        <div style="font-size:11px;color:#9ca3af;display:flex;align-items:center;gap:4px;margin-bottom:8px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Nama harus persis sama dengan database (tidak case sensitive)
+        </div>
+        <button onclick="eslAddMembersFromTextarea()" style="width:100%;padding:10px;background:#22c55e;color:#fff;border-radius:10px;font-size:13px;font-weight:700;">+ Tambah Member</button>
+        <div id="eslMemberError" style="color:#ef4444;font-size:11px;margin-top:6px;display:none;"></div>
+      </div>
+
+    </div>
+    <div class="modal-footer-sticky">
+      <button class="btn-cancel" onclick="document.getElementById('confirmEslModal').style.display='none'" style="flex:1;padding:12px;font-size:14px;border-radius:12px;">Batal</button>
+      <button onclick="doEditEslShow()" style="flex:2;padding:12px;font-size:14px;border-radius:12px;background:#3b82f6;color:#fff;font-weight:700;">Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="deleteShowListModal">
+  <div class="modal-box">
+    <div class="modal-body">
+      <div class="modal-header-block">
+        <h3 style="color:#ef4444;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          Hapus Show
+        </h3>
+        <p id="dslSubtitle">Pilih show yang ingin dihapus</p>
+      </div>
+      <div id="dslList" class="msl-list">
+        <div class="msl-loading"><div class="spinner" style="width:18px;height:18px;border-width:2px;border-top-color:#ef4444;"></div> Memuat...</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeDeleteShowModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Show Modal -->
+<div class="modal" id="confirmDslModal">
+  <div class="modal-box" style="max-width:380px;">
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="width:56px;height:56px;background:#fee2e2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          <path d="M10 11v6"/><path d="M14 11v6"/>
+          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+        </svg>
+      </div>
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:4px;">Hapus Show Ini?</h3>
+      <p id="confirmDslDesc" style="font-size:13px;color:#6b7280;margin-bottom:12px;"></p>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:700;color:#6b7280;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">Member di show ini</div>
+      <div id="confirmDslMembers" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:700;color:#6b7280;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">Hapus untuk member</div>
+      <select id="dslMemberSelect" style="width:100%;padding:10px;border-radius:10px;border:2px solid #ddd;font-size:14px;outline:none;background:inherit;color:inherit;"></select>
+    </div>
+    <div class="modal-buttons" style="gap:10px;">
+      <button class="btn-cancel" onclick="document.getElementById('confirmDslModal').style.display='none'" style="flex:1;padding:12px;font-size:14px;border-radius:12px;">Batal</button>
+      <button onclick="doDeleteDslShow()" style="flex:1;padding:12px;font-size:14px;border-radius:12px;background:#ef4444;color:#fff;font-weight:700;">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Show Modal -->
+<div class="modal" id="editShowModal">
+  <div class="modal-box">
+
+    <!-- Scrollable body -->
+    <div class="modal-body">
+      <div class="modal-header-block">
+        <h3 style="display:flex;align-items:center;gap:8px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:#3b82f6"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit Show
+        </h3>
+        <p id="editShowOriginalInfo">Mengedit show...</p>
+      </div>
+
+      <!-- Tanggal & Jam — 2 kolom -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="input-label">Tanggal Show</label>
+          <input type="date" id="editShowDate">
+        </div>
+        <div class="form-group">
+          <label class="input-label">Jam Show</label>
+          <input type="time" id="editShowTime">
+        </div>
+      </div>
+
+      <!-- Setlist -->
+      <label class="input-label">Setlist</label>
+      <select id="editSetlistSelect" onchange="toggleEditCustomSetlistField(); filterEditMemberBySetlist()">
+        <option value="">Pilih Setlist...</option>
+        <option value="__custom__">Kustom Setlist (Ketik Manual)</option>
+      </select>
+      <div class="custom-setlist-field" id="editCustomSetlistField">
+        <label class="input-label">Nama Setlist Kustom</label>
+        <input type="text" id="editCustomSetlistName" placeholder="Masukkan nama setlist..." maxlength="100">
+        <div class="tip-text"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;margin-right:5px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Masukkan nama setlist bebas sesuai keinginan</div>
+      </div>
+      <!-- Member -->
+      <label class="input-label">Member</label>
+      <select id="editMemberSelect">
+        <option value="">-- Pilih Member --</option>
+      </select>
+
+      <!-- Birthday & Graduation -->
+      <div style="height:1px;background:#1f2937;margin:14px 0;"></div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+
+        <!-- Birthday -->
+        <div style="padding:12px 14px;border-radius:12px;border:1.5px solid #7f1d1d;background:#1f1818;">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+            <input type="checkbox" id="editIsBirthdayShow" onchange="toggleEditBirthdayField()" style="width:18px;height:18px;cursor:pointer;margin:0;accent-color:#e60012;flex-shrink:0;">
+            <span style="font-size:13px;font-weight:600;color:#fca5a5;display:flex;align-items:center;gap:7px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h0.01"/><path d="M12 4h0.01"/><path d="M17 4h0.01"/></svg>
+              Birthday Show (STS)
+            </span>
+          </label>
+          <div id="editBirthdayMemberField" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);">
+            <select id="editBirthdayMember" style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #374151;background:#0a0e1a;color:#e5e7eb;font-size:13px;outline:none;margin:0;"><option value="">-- Pilih Member --</option></select>
+          </div>
+        </div>
+
+        <!-- Graduation -->
+        <div style="padding:12px 14px;border-radius:12px;border:1.5px solid #1e3a8a;background:#1a1f2e;">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+            <input type="checkbox" id="editIsGraduationShow" onchange="toggleEditGraduationField()" style="width:18px;height:18px;cursor:pointer;margin:0;accent-color:#3b82f6;flex-shrink:0;">
+            <span style="font-size:13px;font-weight:600;color:#93c5fd;display:flex;align-items:center;gap:7px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              Graduation Show (Last Show)
+            </span>
+          </label>
+          <div id="editGraduationMemberField" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);">
+            <div style="background:rgba(30,58,138,0.5);color:#93c5fd;display:flex;align-items:flex-start;gap:6px;border-radius:8px;padding:7px 10px;font-size:12px;margin-bottom:8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span><strong>PERHATIAN:</strong> Centang jika ini show terakhir member!</span>
+            </div>
+            <select id="editGraduationMember" style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #374151;background:#0a0e1a;color:#e5e7eb;font-size:13px;outline:none;margin:0;"><option value="">-- Pilih Member --</option></select>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Sticky footer -->
+    <div class="modal-footer" style="display:flex;gap:10px;">
+      <button class="btn-cancel" onclick="closeEditShowModal()" style="flex:1;padding:12px;font-size:14px;border-radius:12px;">Batal</button>
+      <button onclick="saveEditShow()" style="flex:2;padding:12px;font-size:14px;border-radius:12px;background:#3b82f6;color:#fff;font-weight:700;">Simpan Perubahan</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/utils.js"></script>
+<script src="js/admin.js"></script>
+<footer style="text-align:center;padding:12px;color:#6b7280;font-size:10px;border-top:1px solid #e5e7eb;margin-top:20px">© 2026 Show Theater. Data diperbarui secara real-time</footer>
+</body>
+</html>

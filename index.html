@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="img/favicon-theater-jkt48.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JKT48 Show Theater</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.107.0"></script>
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/brutal.css">
+</head>
+<body>
+<header>
+    <div class="header-title" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="cursor:pointer">JKT48 SHOW THEATER</div>
+    <div class="header-buttons">
+        <button class="schedule-button" onclick="openSchedule()" title="Jadwal Show">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19,4H18V3a1,1,0,0,0-2,0V4H8V3A1,1,0,0,0,6,3V4H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4Zm1,15a1,1,0,0,1-1,1H5a1,1,0,0,1-1,1V12H20Zm0-9H4V7A1,1,0,0,1,5,6H6V7A1,1,0,0,0,8,7V6h8V7a1,1,0,0,0,2,0V6h1a1,1,0,0,1,1,1Z"/>
+            </svg>
+        </button>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+            <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"></svg>
+        </button>
+    </div>
+</header>
+<div class="live-show-banner" id="liveShowBanner" onclick="openLiveShowDetail()">
+    <div class="live-show-content">
+        <div class="live-show-left">
+            <div class="live-badge" id="liveStatusBadge">
+                <span class="live-dot"></span><span>LIVE NOW</span>
+            </div>
+            <div class="live-show-info">
+                <h3 class="live-show-title" id="liveShowTitle">Loading...</h3>
+                <div id="liveGraduationBadge" style="display:none;align-items:center;gap:6px;background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;font-size:11px;font-weight:bold;color:#fff;margin-top:4px;width:fit-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16"><path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5Z"/><path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Z"/></svg>
+                    <span id="liveGraduationText"></span>
+                </div>
+                <div class="live-show-time" id="liveShowTime">-</div>
+            </div>
+        </div>
+        <div class="live-show-right">
+            <div class="see-detail-link">Lihat Detail</div>
+        </div>
+    </div>
+</div>
+<div class="top">
+    <div class="search-box">
+        <!-- Search icon (kaca pembesar) -->
+        <span class="search-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+        </span>
+        <input type="text" id="searchInput" placeholder="Search Member JKT48" oninput="searchMember(); toggleClearBtn()">
+        <button class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()" title="Hapus pencarian">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+</div>
+<div class="last-update" id="lastUpdate">
+    <div class="spinner"></div>
+    <span>Loading...</span>
+</div>
+<div class="top-member-section">
+    <div class="top-member-title">SETLIST PERFORMANCE</div>
+    <div class="top-member-row">
+        <button class="top-member-filter setlist-tte" onclick="showSetlist('tte')">Sambil Menggandeng Erat Tanganku</button>
+        <button class="top-member-filter setlist-ramune" onclick="showSetlist('ramune')">Cara Meminum Ramune</button>
+        <button class="top-member-filter setlist-pertaruhan" onclick="showSetlist('pertaruhan')">Pertaruhan Cinta</button>
+        <button class="top-member-filter setlist-pajama" onclick="showSetlist('pajama')">Pajama Drive</button>
+    </div>
+</div>
+<div class="filters">
+    <div class="filter-section">
+        <div class="filter-section-title">CARI GENERASI</div>
+        <div class="filter-row">
+            <button class="filter gen-search" onclick="openGenModal()">Pilih Generasi</button>
+        </div>
+    </div>
+    <div class="filter-section">
+        <div class="filter-section-title">FILTER TEAM</div>
+        <div class="filter-row">
+            <button class="filter team-filter" onclick="filterTeam('Love')" style="background:#e20785;color:#fff">Love</button>
+            <button class="filter team-filter" onclick="filterTeam('Dream')" style="background:#00a4a5;color:#fff">Dream</button>
+            <button class="filter team-filter" onclick="filterTeam('Passion')" style="background:#f69220;color:#fff">Passion</button>
+        </div>
+    </div>
+</div>
+<div class="stats" id="stats"></div>
+<div class="setlist-stats" id="setlistStats"></div>
+<div class="container" id="list">
+    <div class="loading">
+        <div class="spinner"></div>
+        <span>Loading data...</span>
+    </div>
+</div>
+
+<footer class="detail-footer" id="mainFooter">
+    <p>© 2026 Show Theater. Data diperbarui secara real-time</p>
+</footer>
+
+<div class="modal-overlay" id="genModal" onclick="closeModalOnOverlay(event)">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Pilih Generasi</div>
+            <button class="modal-close" onclick="closeGenModal()">×</button>
+        </div>
+        <div class="gen-grid">
+            <div class="gen-option all-gen" onclick="selectGen('all')">All Generasi</div>
+            <div class="gen-option gen-3" onclick="selectGen(3)">Gen 3</div>
+            <div class="gen-option gen-6" onclick="selectGen(6)">Gen 6</div>
+            <div class="gen-option gen-7" onclick="selectGen(7)">Gen 7</div>
+            <div class="gen-option gen-8" onclick="selectGen(8)">Gen 8</div>
+            <div class="gen-option gen-9" onclick="selectGen(9)">Gen 9</div>
+            <div class="gen-option gen-10" onclick="selectGen(10)">Gen 10</div>
+            <div class="gen-option gen-11" onclick="selectGen(11)">Gen 11</div>
+            <div class="gen-option gen-12" onclick="selectGen(12)">Gen 12</div>
+            <div class="gen-option gen-13" onclick="selectGen(13)">Gen 13</div>
+            <div class="gen-option gen-14" onclick="selectGen(14)">Gen 14</div>
+        </div>
+    </div>
+</div>
+
+<script src="js/utils.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

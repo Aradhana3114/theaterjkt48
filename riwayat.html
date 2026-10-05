@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="img/favicon-theater-jkt48.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riwayat Show - JKT48 Show Theater</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.107.0"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<link rel="stylesheet" href="css/riwayat.css">
+<link rel="stylesheet" href="css/brutal.css">
+</head>
+<body>
+<header class="main-header">
+  <div class="theater-header" onclick="window.location.replace('index.html')" style="cursor:pointer">JKT48 SHOW THEATER</div>
+  <div class="detail-header">
+    <button onclick="goBack()" class="back-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Kembali
+    </button>
+    <div class="detail-title">Riwayat Show</div>
+
+  </div>
+</header>
+
+<div class="container" id="container">
+  <div class="skeleton-loading">
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+  </div>
+</div>
+
+<footer class="detail-footer">
+  <p>© 2026 Show Theater. Data diperbarui secara real-time</p>
+</footer>
+
+<script src="js/utils.js"></script>
+<script src="js/riwayat.js"></script>
+</body>
+</html>
