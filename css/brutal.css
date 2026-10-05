@@ -1233,30 +1233,12 @@ body.dark .show-setlist{background:var(--surface-2)!important;color:var(--text)!
   border-radius:var(--radius-sm)!important;
   color:var(--text)!important;
 }
-.avatar-wrap{
-  border:3px solid var(--ink)!important;
-  border-radius:12px!important;
-  box-shadow:var(--shadow-sm)!important;
-  background:var(--purple)!important;
-}
-.avatar-overlay{
-  background:var(--yellow)!important;
-  color:var(--ink)!important;
-  border:3px solid var(--ink)!important;
-}
 .status-badge{
   background:var(--yellow)!important;
   color:var(--ink)!important;
   border:2px solid var(--ink)!important;
   border-radius:8px!important;
   box-shadow:2px 2px 0 var(--ink);
-  font-family:var(--font-mono)!important;
-}
-.show-num{
-  background:var(--surface-2)!important;
-  color:var(--ink)!important;
-  border:2px solid var(--ink)!important;
-  border-radius:8px!important;
   font-family:var(--font-mono)!important;
 }
 
@@ -1441,8 +1423,8 @@ body.dark .container{box-shadow:none!important}
 .left-panel .panel-title,.right-panel .panel-title,.social-title,
 .birthday-member-card .member-info,
 .setlist-radio-label.selected,.login-submit-btn,.login-submit-btn:hover,
-.avatar-overlay,.admin-badge,.option-warning,.dsl-member-chip,
-  .splash-logo,.status-badge,#liveGraduationBadge,
+.admin-badge,.option-warning,.dsl-member-chip,
+  .splash-logo,#liveGraduationBadge,
 .filter.active,.top-member-filter.active,.filter-btn.active,
 .team-btn.active,.team-btn.active-love,.team-btn.active-dream,.team-btn.active-passion,
 .toast.success,.notification-item.notification-success,
@@ -2140,6 +2122,133 @@ body.dark .photo-container{background:transparent!important}
   box-shadow:none!important;
   background:var(--surface-2)!important;
   color:var(--text)!important;
+}
+
+/* =========================================================
+   32. RESPONSIVE OVERRIDES (semua halaman)
+   ========================================================= */
+
+/* ---- Sub-header: judul absolut selalu nabrak tombol "Kembali" di layar
+   sempit. Ganti jadi grid 2 kolom: tombol | judul (boleh wrap/ellipsis). ---- */
+.detail-header{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr);
+  align-items:center;
+  column-gap:10px;
+}
+.detail-header .detail-title{
+  position:static!important;
+  transform:none!important;
+  left:auto!important;
+  white-space:normal!important;
+  min-width:0;
+  text-align:center;
+  line-height:1.25;
+  padding:2px 0;
+}
+.detail-header .back-btn{
+  white-space:nowrap;
+  flex:0 0 auto;
+}
+
+/* di layar sempit judul boleh turun ke baris baru dan tetap centered */
+@media (max-width:400px){
+  .detail-header .detail-title{font-size:13px!important}
+  .detail-header .back-btn{font-size:13px!important;gap:4px!important}
+}
+@media (max-width:340px){
+  .detail-header{column-gap:7px;padding:9px 10px!important}
+  .detail-header .detail-title{font-size:12px!important}
+  .detail-header .back-btn{font-size:12px!important}
+  .detail-header .back-btn svg{width:13px;height:13px}
+}
+
+/* ---- Cegah overflow horizontal mendasar di semua halaman ---- */
+html,body{
+  max-width:100%;
+  overflow-x:hidden;
+}
+/* elemen yang sengaja full-bleed tetap boleh keluar dari container */
+img{max-width:100%}
+
+/* ---- Header utama: judul + tombol tidak boleh bertabrakan.
+   HATI-HATI: di halaman detail (member/riwayat/liveshow/schedule) <header>
+   Berisi .theater-header DI ATAS .detail-header (susunan vertikal / block).
+   JANGAN diubah jadi flex, karena itu akan menyandingkan keduanya. ---- */
+header:not(.main-header){
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:nowrap;
+}
+header:not(.main-header) .header-title,
+header:not(.main-header) .header-left{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  flex:1 1 auto;
+}
+header:not(.main-header) .header-buttons,
+header:not(.main-header) .admin-badge{
+  flex:0 0 auto;
+}
+@media (max-width:400px){
+  header:not(.main-header) .header-title{font-size:15px!important}
+  header:not(.main-header) .header-buttons{gap:6px!important}
+  .schedule-button,.theme-toggle{width:34px!important;height:34px!important;padding:6px!important}
+  .schedule-button svg,.theme-toggle svg{width:17px!important;height:17px!important}
+}
+@media (max-width:340px){
+  header:not(.main-header) .header-title{font-size:13px!important;letter-spacing:0!important}
+  .schedule-button,.theme-toggle{width:30px!important;height:30px!important;padding:5px!important}
+  .schedule-button svg,.theme-toggle svg{width:15px!important;height:15px!important}
+}
+
+/* Header halaman detail: judul brand tetap bisa ellipsis, tidak menabrak */
+.main-header .theater-header{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  padding-left:10px;
+  padding-right:10px;
+}
+@media (max-width:400px){
+  .main-header .theater-header{font-size:13px!important;letter-spacing:.5px!important;padding:7px 8px!important}
+}
+@media (max-width:340px){
+  .main-header .theater-header{font-size:11px!important;letter-spacing:0!important;padding:6px 6px!important}
+}
+
+/* ---- Baris tombol setlist & filter: grid sama rata.
+   flex + min-width bikin tombol wrap ragged & melewati tepi layar ---- */
+@media (max-width:600px){
+  .top-member-row,
+  .filter-row{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px!important;
+    align-items:stretch;
+  }
+  .top-member-row>*,
+  .filter-row>*{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    margin:0!important;
+  }
+  /* rapatkan blok filter supaya tidak banyak ruang kosong */
+  .filters,.filter-section,.top-member-section{padding-left:12px!important;padding-right:12px!important}
+  .filters{padding-top:10px!important;padding-bottom:10px!important}
+  .filter-section{margin-bottom:10px!important}
+  .top-member-filter,.filter{font-size:11px!important;padding:9px 6px!important;line-height:1.25!important}
+}
+@media (max-width:380px){
+  .top-member-row,
+  .filter-row{grid-template-columns:1fr!important}
+  .top-member-filter,.filter{font-size:12px!important;padding:10px 8px!important}
 }
 
 

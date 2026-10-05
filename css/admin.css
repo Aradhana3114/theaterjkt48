@@ -1469,9 +1469,11 @@ body.dark .login-right-panel input:focus {
   }
   .login-desktop-card {
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 0;
     height: auto;
     border-radius: 0;
+    /* auto top/bottom margin centres the card without clipping on overflow */
+    margin:auto 0;
   }
 
   /* LEFT PANEL - compact info strip */
@@ -1508,18 +1510,18 @@ body.dark .login-right-panel input:focus {
   .login-dot-grid { display: none; }
   .login-deco-circle { display: none; }
 
-  /* RIGHT PANEL - form, fills remaining space */
+  /* RIGHT PANEL - form, sits right under the info strip (no dead space) */
   .login-right-panel {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     max-width: 100%;
-    padding: 24px 20px 32px;
-    justify-content: center;
+    padding: 22px 20px 30px;
+    justify-content: flex-start;
     min-height: 0;
   }
   .login-form-wrap {
     max-width: 100%;
-    justify-content: center;
-    flex: 1;
+    justify-content: flex-start;
+    flex: 0 0 auto;
   }
   .login-form-icon { width: 44px; height: 44px; border-radius: 12px; margin-bottom: 14px; }
   .login-form-title { font-size: 22px; }
