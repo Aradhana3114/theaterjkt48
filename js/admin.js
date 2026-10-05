@@ -793,9 +793,11 @@ function renderMembers(){
     sorted.forEach(function(m){
         var percent=Math.min(100,(m.show/1000)*100);
         var color=GEN_COLORS[m.gen]||'#6366f1';
+        var footerColor=m.status==='graduated'?'#6b7280':(m.status==='resigned'?'#4b5563':color);
+        var onLightClass=isLightColor(footerColor)?' on-light':'';
         var card=document.createElement('div');
         card.className='card animate-in'+(m.status==='trainee'?' trainee':'')+(m.status==='graduated'?' graduated':'')+(m.status==='resigned'?' resigned':'');
-        card.style.setProperty('--gen-color',color);
+        card.style.setProperty('--gen-color',footerColor);
         
         var statusBadgeHtml='';
         if(m.status==='graduated'){
@@ -811,24 +813,27 @@ function renderMembers(){
         var firstChar = m.name.charAt(0);
         var memberInactive = isMemberInactive(m);
         card.innerHTML=
-            '<div class="avatar-wrap">'+
+            '<div class="avatar-container">'+
                 '<img class="avatar" src="img/'+encodeURIComponent(m.name.toLowerCase())+'.jpg" onerror="this.onerror=null;this.style.display=\'none\';var p=document.createElement(\'div\');p.className=\'avatar-placeholder\';p.textContent=\''+escapeForJsAttr(firstChar)+'\';this.parentNode.appendChild(p);" alt="'+escapeHtml(m.name)+'">'+
-                '<div class="avatar-overlay"></div>'+
                 statusBadgeHtml+
             '</div>'+
-            '<div class="card-footer">'+
+            '<div class="card-footer'+onLightClass+'">'+
                 '<div class="gen-badge">Gen '+escapeHtml(m.gen)+'</div>'+
-                '<div class="name">'+escapeHtml(m.name)+'</div>'+
-                '<div class="show"><span class="show-num">'+m.show+'</span>&nbsp;show</div>'+
-                '<div class="bar"><span style="width:'+percent+'%"></span></div>'+
+                '<div class="name-container">'+
+                    '<div class="name">'+escapeHtml(m.name)+'</div>'+
+                '</div>'+
+                '<div class="show-info"><span class="show-count">'+m.show+'</span>&nbsp;show</div>'+
+                '<div class="bar-container">'+
+                    '<div class="bar"><span style="width:'+percent+'%"></span></div>'+
+                '</div>'+
                 '<div class="admin-controls">'+
-                    '<button onclick="updateShow('+m.id+',-1)" title="Kurang show" '+(memberInactive?'disabled': '')+'>−</button>'+
-                    '<button onclick="openSetlistModal('+m.id+')" title="Tambah show" '+(memberInactive?'disabled': '')+' style="background:rgba(255,255,255,0.25);">+</button>'+
-                    '<button onclick="openMemberShowList('+m.id+')" title="Edit show" style="background:rgba(59,130,246,0.45);">✎</button>'+
+                    '<button class="btn-minus" onclick="updateShow('+m.id+',-1)" title="Kurang show" '+(memberInactive?'disabled': '')+'>−</button>'+
+                    '<button class="btn-plus" onclick="openSetlistModal('+m.id+')" title="Tambah show" '+(memberInactive?'disabled': '')+'>+</button>'+
+                    '<button class="btn-edit" onclick="openMemberShowList('+m.id+')" title="Edit show">✎</button>'+
                 '</div>'+
             '</div>';
         list.appendChild(card);
-        var numEl = card.querySelector('.show-num');
+        var numEl = card.querySelector('.show-count');
         if (numEl) {
             numEl.textContent = '0';
             setTimeout(function(el, val) { animateCounter(el, val, 600); }, 0, numEl, m.show);
