@@ -11,6 +11,37 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.107.0"></script>
 <link rel="stylesheet" href="css/index.css">
 <link rel="stylesheet" href="css/brutal.css">
+<style>
+/* ================================================================
+   OVERRIDE KHUSUS index.html — dimuat TERAKHIR agar menang dari
+   brutal.css (brutal.css memakai !important)
+   ================================================================ */
+
+/* --- Tombol setlist & filter tidak boleh segede layar -------------
+   brutal.css:2248-2252 mengubah .top-member-row / .filter-row jadi
+   1 kolom di <=380px, sehingga tiap tombol melebar penuh dan boros
+   tinggi layar HP. Yang dikehendaki: 2 kolom, tinggi compact, label
+   pendek. */
+@media (max-width:600px){
+  .top-member-row,
+  .filter-row{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+  }
+  .top-member-row>*,
+  .filter-row>*{
+    min-height:0!important;
+    padding:7px 5px!important;
+    font-size:10px!important;
+    line-height:1.2!important;
+    letter-spacing:0!important;
+    border-radius:6px!important;
+  }
+  .top-member-section{padding:10px 12px!important}
+  .top-member-title{font-size:9px!important;margin-bottom:6px!important}
+  .filter-section-title{font-size:9px!important;margin-bottom:6px!important}
+}
+</style>
 </head>
 <body>
 <header>

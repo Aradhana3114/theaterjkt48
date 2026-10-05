@@ -11,6 +11,94 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.107.0"></script>
 <link rel="stylesheet" href="css/liveshow.css">
 <link rel="stylesheet" href="css/brutal.css">
+<style>
+/* ================================================================
+   OVERRIDE KHUSUS liveshow.html — dimuat TERAKHIR agar menang dari
+   brutal.css (brutal.css memakai !important)
+   ================================================================ */
+
+/* --- 1. Banner pink jangan setinggi layar ------------------------
+   Di HP, .show-left-panel dipaksa setinggi layar oleh brutal.css:2018
+   (`height:calc(100vh - ...)`), lalu .live-show-header jadi flex column
+   (brutal.css:1981) dan .setlist-banner-container dapat `flex:1 1 auto`
+   (brutal.css:1994).
+
+   Diukur di 393x852: container = 508px, gambar = 202px -> ada ~306px
+   warna pink kosong di bawah logo. Di layar sempit layout-nya satu kolom
+   biasa, jadi panel & header harus ikut tinggi isinya, dan container
+   banner cuma setinggi gambarnya. */
+@media (max-width:1024px){
+  body.page-liveshow .show-left-panel{
+    height:auto!important;
+    min-height:0!important;
+    overflow:visible!important;
+  }
+  body.page-liveshow .live-show-header{
+    height:auto!important;
+    min-height:0!important;
+    overflow:visible!important;
+  }
+  body.page-liveshow .setlist-banner-container{
+    flex:0 0 auto!important;
+    height:auto!important;
+    min-height:0!important;
+    overflow:hidden!important;
+    margin-bottom:10px!important;
+  }
+  body.page-liveshow .banner-fallback{
+    flex:0 0 auto!important;
+    height:auto!important;
+  }
+  /* Banner dipotong jadi rasio 16:9 supaya tidak ada area kosong,
+     persis seperti grid card member di halaman utama. */
+  body.page-liveshow .setlist-banner{
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    aspect-ratio:16/9!important;
+    object-fit:cover!important;
+    object-position:center 22%!important;
+    border-radius:10px!important;
+    margin:0 auto!important;
+  }
+}
+
+/* --- 1b. Laptop: banner isi penuh panel, jangan ada pita pink ---
+   Di layout 2 kolom, .setlist-banner-container tetap flex:1, tapi
+   gambar sesuai ukuran aslinya (object-fit:contain) cuma 229px
+   sedangkan container 367px -> 138px warna setlist kosong di bawah logo.
+   Gambar dibuat object-fit:cover setinggi container supaya tidak ada
+   pita kosong. */
+@media (min-width:1025px){
+  body.page-liveshow .setlist-banner{
+    width:100%!important;
+    max-width:100%!important;
+    height:100%!important;
+    max-height:none!important;
+    object-fit:cover!important;
+    object-position:center 22%!important;
+    border-radius:10px!important;
+  }
+}
+
+/* --- 2. Grid member 4 kolom di HP --------------------------------
+   liveshow.css:163 & 181 memaksa 2 kolom di HP, padahal halaman utama
+   (index.css:107) sudah 4 kolom. Samakan supaya satu device = 4 kartu. */
+@media (max-width:767px){
+  body.page-liveshow .members-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+  body.page-liveshow .member-info{padding:6px 3px 7px!important;gap:3px!important}
+  body.page-liveshow .member-name{font-size:9.5px!important;line-height:1.25!important;min-height:24px!important}
+  body.page-liveshow .members-section{padding:10px 8px!important}
+}
+@media (max-width:360px){
+  body.page-liveshow .members-grid{gap:6px!important}
+  body.page-liveshow .member-name{font-size:9px!important}
+}
+</style>
 </head>
 <body class="page-liveshow">
 <header class="main-header">

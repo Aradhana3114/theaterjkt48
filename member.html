@@ -13,6 +13,204 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.107.0"></script>
 <link rel="stylesheet" href="css/member.css">
 <link rel="stylesheet" href="css/brutal.css">
+<style>
+/* ================================================================
+   OVERRIDE KHUSUS member.html — dimuat TERAKHIR agar menang dari
+   brutal.css (brutal.css memakai !important)
+   ================================================================ */
+
+/* --- 1. Buang card yang tidak perlu ------------------------------
+   brutal.css memberi border + hard shadow pada .left-panel,
+   .right-panel, .milestone-card, setiap .info-row, setiap .social-link
+   dan .social-icon. Hasilnya halaman ini 5 lapis card bersusun.
+   Semuanya diratakan; satu-satunya "card" yang dipertahankan adalah
+   foto member (memang objek foto, bukan navigasi). */
+.left-panel,
+.right-panel{
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+
+/* --- 2. Judul section bukan lagi stiker merah miring --------------
+   Brutal membuat .panel-title/.social-title jadi badge kuning/merah
+   miring (rotate -1deg) dengan display:inline-block. Di HP panel kiri
+   jadi grid (brutal.css:2278) sehingga judul melebar jadi bar merah
+   penuh dan terbaca seperti tombol. Ganti jadi label kecil + garis. */
+.left-panel .panel-title,
+.right-panel .panel-title,
+.social-title{
+  display:block!important;
+  width:auto!important;
+  transform:none!important;
+  background:transparent!important;
+  border:0!important;
+  border-bottom:2px solid var(--red,#e60012)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  color:var(--ink,#12121a)!important;
+  font-family:var(--font-mono,ui-monospace,monospace)!important;
+  font-size:10px!important;
+  font-weight:700!important;
+  line-height:1.4!important;
+  letter-spacing:1.4px!important;
+  text-transform:uppercase!important;
+  padding:0 0 5px!important;
+  margin:0 0 10px!important;
+}
+body.dark .left-panel .panel-title,
+body.dark .right-panel .panel-title,
+body.dark .social-title{
+  color:var(--text,#e5e7eb)!important;
+  border-color:var(--red,#e60012)!important;
+}
+
+/* --- 3. Progres: kartu cyan + bar belang hilang ------------------- */
+.milestone-card{
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  padding:0!important;
+}
+.milestone-header{margin-bottom:8px!important;gap:10px!important}
+.milestone-title{
+  font-family:var(--font-mono,ui-monospace,monospace)!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  letter-spacing:.4px!important;
+  color:var(--text,#333)!important;
+}
+.milestone-target{
+  font-family:var(--font-mono,ui-monospace,monospace)!important;
+  font-size:10px!important;
+  letter-spacing:.6px!important;
+  color:var(--muted,#6b7280)!important;
+}
+.progress-bar-container{
+  background:var(--surface-2,#f4f4f4)!important;
+  border:2px solid var(--ink,#12121a)!important;
+  border-radius:999px!important;
+  height:16px!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+.progress-bar-fill{
+  background:var(--red,#e60012)!important;
+  border-right:0!important;
+  border-radius:999px!important;
+}
+.progress-text{display:none!important}
+.progress-info{
+  text-align:left!important;
+  font-family:var(--font-mono,ui-monospace,monospace)!important;
+  font-size:10px!important;
+  color:var(--muted,#6b7280)!important;
+  margin-top:7px!important;
+}
+
+/* --- 4. About: daftar 2 kolom yang rata, bukan kartu --------------
+   Tiap .info-row sebelumnya jadi kartu ber-shadow dengan label lebar
+   tetap 90px, jadi "TANGGAL LAHIR" / "GOLONGAN DARAH" /
+   "TINGGI BADAN" pecah dua baris dan nilai kanan terpotong tepi. */
+.info-row{
+  display:grid!important;
+  grid-template-columns:clamp(78px,34%,220px) minmax(0,1fr)!important;
+  align-items:baseline!important;
+  column-gap:12px!important;
+  padding:9px 0!important;
+  background:transparent!important;
+  border:0!important;
+  border-bottom:1px solid rgba(0,0,0,.12)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+.info-row:last-child{border-bottom:0!important}
+body.dark .info-row{border-bottom-color:rgba(255,255,255,.12)!important}
+.info-label{
+  width:auto!important;
+  font-family:var(--font-mono,ui-monospace,monospace)!important;
+  font-size:9.5px!important;
+  font-weight:700!important;
+  line-height:1.35!important;
+  letter-spacing:.7px!important;
+  text-transform:uppercase!important;
+  color:var(--muted,#6b7280)!important;
+}
+.info-value{
+  font-size:12.5px!important;
+  font-weight:700!important;
+  line-height:1.35!important;
+  text-align:right!important;
+  overflow-wrap:anywhere!important;
+  color:var(--text,#333)!important;
+}
+
+/* --- 5. Social media: logo jelas, tanpa kartu ---------------------
+   (a) brutal.css:767-772 memberi .social-icon kartu kuning 3px.
+   (b) brutal.css:773 memaksa `fill:currentColor;stroke:none`, padahal
+       ikon Instagram & TikTok memakai path ber-stroke/fill campuran,
+       jadi logonya berubah jadi gumpalan dan tidak terbaca.
+   (c) .social-link jadi kartu bershadow, menimpa logo.
+   Diperbaiki: baris tipis + ikon warna platform + stroking kembali. */
+.social-section{margin-top:20px!important}
+.social-link{
+  display:grid!important;
+  grid-template-columns:34px minmax(0,1fr) 12px!important;
+  align-items:center!important;
+  column-gap:10px!important;
+  padding:9px 0!important;
+  margin:0!important;
+  background:transparent!important;
+  border:0!important;
+  border-bottom:1px solid rgba(0,0,0,.12)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+.social-link:last-child{border-bottom:0!important}
+body.dark .social-link{border-bottom-color:rgba(255,255,255,.12)!important}
+.social-link:hover{transform:none!important;background:transparent!important}
+.social-icon{
+  width:34px!important;
+  height:34px!important;
+  border:0!important;
+  border-radius:9px!important;
+  box-shadow:none!important;
+}
+.social-icon.twitter{background:rgba(29,155,240,.15)!important;color:#1d9bf0!important}
+.social-icon.instagram{background:rgba(225,48,108,.15)!important;color:#e1306c!important}
+.social-icon.tiktok{background:rgba(22,198,132,.18)!important;color:#0fb98c!important}
+body.dark .social-icon.twitter{color:#4aa8ef!important}
+body.dark .social-icon.instagram{color:#f06ba0!important}
+body.dark .social-icon.tiktok{color:#25d4ae!important}
+/* kembalikan ikon ber-stroke (Instagram) ke mode stroke */
+.social-icon svg{fill:currentColor!important;stroke:none!important}
+.social-icon.instagram svg{fill:none!important;stroke:currentColor!important}
+.social-name{font-size:11.5px!important;font-weight:700!important}
+.social-handle{font-size:10.5px!important}
+.social-arrow{font-size:12px!important;color:var(--muted,#6b7280)!important}
+
+/* --- 6. HP: rapatkan lagi ---------------------------------------- */
+@media (max-width:600px){
+  .container-header{padding:9px 12px!important}
+  .container-header .profile-title{font-size:13px!important}
+  .left-panel,.right-panel{margin:0 14px 20px!important}
+  .member-name{font-size:17px!important}
+  .photo,.photo-error{width:84px!important;height:118px!important}
+  .info-value{font-size:12px!important}
+}
+
+/* --- 7. Layar lebar: jangan sampai melebar sendiri ---------------
+   Di laptop panel kanan ~870px sehingga pasangan label/nilai terlihat
+   terpencar. Baris dibatasi maksimal 720px agar label dan nilainya
+   tetap berdekatan. */
+@media (min-width:1025px){
+  .right-panel .panel-title,
+  .right-panel .info-row,
+  .right-panel .social-section{max-width:720px!important}
+}
+</style>
 </head>
 <body>
 

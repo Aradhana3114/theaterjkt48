@@ -108,12 +108,11 @@ function renderMember(member) {
         <div class="panel-title">Progres</div>
         <div class="milestone-card">
           <div class="milestone-header">
-            <div class="milestone-title">Progres Milestone</div>
-            <div class="milestone-target ${statusClass}">${nextMilestone} show</div>
+            <div class="milestone-title">${currentShow} show</div>
+            <div class="milestone-target ${statusClass}">target ${nextMilestone}</div>
           </div>
           <div class="progress-bar-container">
             <div class="progress-bar-fill" style="width:${progress}%"></div>
-            <div class="progress-text">${currentShow} show</div>
           </div>
           <div class="progress-info">
             ${remaining === 0 ? 'Target tercapai!' : `${remaining} show lagi untuk mencapai target`}
