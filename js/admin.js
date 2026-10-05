@@ -2257,6 +2257,7 @@ async function openDeleteShowModal() {
 
 function closeDeleteShowModal() {
     document.getElementById('deleteShowListModal').style.display = 'none';
+    document.getElementById('confirmDslModal').style.display = 'none';
     dslCurrentShowId = null;
     dslShowCache = {};
 }
@@ -2284,7 +2285,18 @@ function confirmDslDelete(group) {
 
     // Simpan group ke variabel
     window._dslCurrentGroup = group;
+    // Sembunyikan list di belakang supaya tidak ada 2 card sekaligus
+    document.getElementById('deleteShowListModal').style.display = 'none';
     document.getElementById('confirmDslModal').style.display = 'flex';
+}
+
+// Tutup konfirmasi hapus & kembalikan ke list show
+function closeConfirmDslModal() {
+    document.getElementById('confirmDslModal').style.display = 'none';
+    window._dslCurrentGroup = null;
+    dslCurrentShowId = null;
+    dslShowCache = {};
+    document.getElementById('deleteShowListModal').style.display = 'flex';
 }
 
 async function doDeleteDslShow() {
@@ -2292,7 +2304,7 @@ async function doDeleteDslShow() {
     if (!group) return;
     var select = document.getElementById('dslMemberSelect');
     var val = select.value;
-    document.getElementById('confirmDslModal').style.display = 'none';
+    closeConfirmDslModal();
 
     try {
         var idsToDelete;
@@ -2449,6 +2461,7 @@ async function openEditShowListModal() {
 
 function closeEditShowListModal() {
     document.getElementById('editShowListModal').style.display = 'none';
+    document.getElementById('confirmEslModal').style.display = 'none';
 }
 
 function eslToggleBirthday() {
@@ -2619,7 +2632,18 @@ function confirmEslEdit(group) {
     if (group.is_birthday_show && group.birthday_member) document.getElementById('eslBirthdayMember').value = group.birthday_member;
     if (group.is_graduation_show && group.graduation_member) document.getElementById('eslGraduationMember').value = group.graduation_member;
 
+    // Sembunyikan list di belakang supaya tidak ada 2 card sekaligus
+    document.getElementById('editShowListModal').style.display = 'none';
     document.getElementById('confirmEslModal').style.display = 'flex';
+}
+
+// Tutup konfirmasi edit & kembalikan ke list show
+function closeConfirmEslModal() {
+    document.getElementById('confirmEslModal').style.display = 'none';
+    window._eslCurrentGroup = null;
+    window._eslEditMembers = null;
+    window._eslOrigMemberCount = 0;
+    document.getElementById('editShowListModal').style.display = 'flex';
 }
 
 function eslRenderMemberChips() {
@@ -2708,7 +2732,7 @@ async function doEditEslShow() {
     if (eslIsBirthday && !eslBirthdayMember) { showNotification('warning', 'Validasi', 'Pilih member birthday'); return; }
     if (eslIsGraduation && !eslGraduationMember) { showNotification('warning', 'Validasi', 'Pilih member graduation'); return; }
 
-    document.getElementById('confirmEslModal').style.display = 'none';
+    closeConfirmEslModal();
 
     try {
         var updateData = {

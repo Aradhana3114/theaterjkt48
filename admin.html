@@ -9,6 +9,100 @@
 <script src="js/admin-loader.js"></script>
 <link rel="stylesheet" href="css/admin.css">
 <link rel="stylesheet" href="css/brutal.css">
+<style>
+/* ================================================================
+   OVERRIDE KHUSUS admin.html — dimuat TERAKHIR agar menang dari
+   brutal.css (brutal.css memakai !important, jadi harus ada di
+   stylesheet berikutnya).
+   ================================================================ */
+
+/* --- 1. .modal = OVERLAY, bukan card ------------------------------
+   Di halaman publik .modal adalah kartu dialog (lihat index.css:151),
+   dan brutal.css:540 menata .modal sebagai card. Tapi di admin.html
+   .modal dipakai sebagai overlay full-screen (admin.css:223), sehingga
+   setiap modal tampil 2 card: card overlay + card .modal-box.
+   Kembalikan .modal ke gaya overlay supaya card hanya satu. */
+.modal{
+  background:rgba(0,0,0,.85)!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  animation:none!important;
+}
+/* Efek "muncul" pindah dari overlay ke card box-nya */
+.modal-box,
+#loginModal .login-desktop-card{
+  animation:brutalPop .2s cubic-bezier(.34,1.56,.64,1);
+}
+
+/* --- 2. Scroll sentuhan di HP --------------------------------------
+   a) .modal-box ikut overflow-y:auto padahal isinya sudah punya
+      .modal-body { flex:1; overflow-y:auto } → ada DUA area scroll
+      tumpuk di dalam overlay fixed, dan gestur jaring tidak menggulir.
+      Sekarang .modal-box jadi container flex saja, yang scroll hanya
+      .modal-body / .modal-body-scroll.
+   b) Flex item wajib min-height:0 supaya benar-benar jadi area scroll
+      (tanpa itu height-nya mengembang mengikuti isi dan tidak menggulir).
+   c) -webkit-overflow-scrolling + overscroll-behavior:contain supaya
+      gestur vertikal dipakai untuk scroll di dalam modal, bukan untuk
+      menggerakkan halaman di belakangnya. */
+.modal-box,
+.modal .modal-body,
+.modal .modal-body-scroll,
+.msl-list,
+.activity-log{
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+}
+
+/* Modal yang isinya sudah punya .modal-body / .modal-body-scroll */
+#setlistModal .modal-box,
+#bulkAddModal .modal-box,
+#memberShowListModal .modal-box,
+#editShowListModal .modal-box,
+#deleteShowListModal .modal-box,
+#editShowModal .modal-box,
+#confirmEslModal .modal-box{overflow:hidden}
+
+#setlistModal .modal-body,
+#bulkAddModal .modal-body,
+#memberShowListModal .modal-body,
+#editShowListModal .modal-body,
+#deleteShowListModal .modal-body,
+#editShowModal .modal-body,
+#confirmEslModal .modal-body-scroll{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+}
+
+/* --- 3. Modal layar penuh di HP -------------------------------------
+   Pakai dvh supaya tidak terpotong browser bar mobile, dan modal-box
+   dibuat tinggi penuh layar supaya form panjang tetap terjangkau. */
+@media (max-width:700px){
+  .modal{
+    align-items:flex-start;
+    padding:10px;
+    /* backdrop-filter di Android sering bikin elemen di dalamnya tidak
+       bisa di-scroll; scrim-nya sudah 85% opaque jadi blur tidak penting */
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+  .modal-box{
+    width:100%!important;
+    max-width:100%!important;
+    max-height:calc(100vh - 20px)!important;
+    max-height:calc(100dvh - 20px)!important;
+    padding:18px 16px 0!important;
+  }
+  #loginModal{overflow-y:auto;padding:0}
+  #loginModal .login-desktop-card{margin:0;border-radius:0}
+}
+</style>
 </head>
 <body class="dark">
 
@@ -633,8 +727,6 @@
   </div>
 </div>
 
-</div>
-
 <!-- Member Show List Modal -->
 <div class="modal" id="memberShowListModal">
   <div class="modal-box">
@@ -761,7 +853,7 @@
 
     </div>
     <div class="modal-footer-sticky">
-      <button class="btn-cancel" onclick="document.getElementById('confirmEslModal').style.display='none'" style="flex:1;padding:12px;font-size:14px;border-radius:12px;">Batal</button>
+      <button class="btn-cancel" onclick="closeConfirmEslModal()" style="flex:1;padding:12px;font-size:14px;border-radius:12px;">Batal</button>
       <button onclick="doEditEslShow()" style="flex:2;padding:12px;font-size:14px;border-radius:12px;background:#3b82f6;color:#fff;font-weight:700;">Simpan Perubahan</button>
     </div>
   </div>
@@ -810,7 +902,7 @@
       <select id="dslMemberSelect" style="width:100%;padding:10px;border-radius:10px;border:2px solid #ddd;font-size:14px;outline:none;background:inherit;color:inherit;"></select>
     </div>
     <div class="modal-buttons" style="gap:10px;">
-      <button class="btn-cancel" onclick="document.getElementById('confirmDslModal').style.display='none'" style="flex:1;padding:12px;font-size:14px;border-radius:12px;">Batal</button>
+      <button class="btn-cancel" onclick="closeConfirmDslModal()" style="flex:1;padding:12px;font-size:14px;border-radius:12px;">Batal</button>
       <button onclick="doDeleteDslShow()" style="flex:1;padding:12px;font-size:14px;border-radius:12px;background:#ef4444;color:#fff;font-weight:700;">Hapus</button>
     </div>
   </div>
