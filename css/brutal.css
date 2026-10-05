@@ -2251,4 +2251,150 @@ header:not(.main-header) .admin-badge{
   .top-member-filter,.filter{font-size:12px!important;padding:10px 8px!important}
 }
 
+/* =========================================================
+   33. Halaman member / riwayat / liveshow di HP
+   ========================================================= */
+
+/* ---- 33a. member.html — panel kiri jadi baris "foto | nama"
+   sebelumnya foto 110pxCenter di panel 352px, jadi ~121px kosong
+   di kiri & kanan. Sekarang foto dan nama jadi satu baris. ---- */
+@media (max-width:600px){
+  .left-panel{
+    display:grid!important;
+    grid-template-columns:auto minmax(0,1fr);
+    align-items:center;
+    column-gap:14px;
+    row-gap:8px;
+    text-align:left;
+  }
+  .left-panel .photo-container{
+    grid-column:1;grid-row:1;
+    margin:0!important;width:auto!important;
+  }
+  .left-panel .member-name{
+    grid-column:2;grid-row:1;
+    margin:0!important;text-align:left!important;
+  }
+  .left-panel .panel-title{
+    grid-column:1 / -1;grid-row:2;
+    margin:6px 0 0!important;width:auto!important;
+  }
+  .left-panel .milestone-card{
+    grid-column:1 / -1;grid-row:3;
+    margin:0!important;
+  }
+  .left-panel .photo,
+  .left-panel .photo-error{
+    width:88px!important;height:124px!important;
+  }
+}
+
+/* ---- 33b. riwayat.html — header member jadi baris "foto | nama+stat" ---- */
+@media (max-width:600px){
+  .member-info{
+    display:grid!important;
+    grid-template-columns:auto minmax(0,1fr);
+    align-items:center;
+    column-gap:14px;
+    row-gap:6px;
+    text-align:left;
+    padding:14px!important;
+  }
+  .member-info .photo-container{
+    grid-column:1;grid-row:1 / span 2;
+    margin:0!important;
+  }
+  .member-info .member-name{
+    grid-column:2;grid-row:1;
+    margin:0!important;text-align:left!important;
+  }
+  .member-info .member-stats{
+    grid-column:2;grid-row:2;
+    justify-content:flex-start!important;
+    margin:0!important;
+  }
+  .member-info .filter-section{
+    grid-column:1 / -1;grid-row:3;
+    margin:12px 0 0!important;
+  }
+  .member-info .photo,
+  .member-info .photo-error{
+    width:88px!important;height:124px!important;
+  }
+}
+
+/* ---- 33c. Tombol filter setlist (riwayat) harus bisa digeser sideways ---- */
+@media (max-width:600px){
+  .member-info .filter-section,
+  .content .filter-section{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    justify-content:flex-start!important;
+    align-items:center;
+    overflow-x:auto!important;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x proximity;
+    padding:0 0 4px!important;
+  }
+  .member-info .filter-section .filter-btn,
+  .content .filter-section .filter-btn{
+    flex:0 0 auto!important;
+    white-space:nowrap;
+    scroll-snap-align:start;
+  }
+}
+
+/* ---- 33d. liveshow.html — banner di-crop, bukan memanjang
+   object-fit:contain + height:auto bikin poster tinggi dirender utuh,
+   jadi ada area warna besar kosong di bawah logo. ---- */
+@media (max-width:600px){
+  .setlist-banner,
+  .setlist-banner-container .setlist-banner{
+    height:auto!important;
+    aspect-ratio:16 / 9!important;
+    max-height:none!important;
+    object-fit:cover!important;
+    object-position:center 20%!important;
+  }
+  .setlist-banner-container{
+    width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+}
+@media (max-width:380px){
+  .setlist-banner,
+  .setlist-banner-container .setlist-banner{
+    aspect-ratio:3 / 2!important;
+  }
+}
+
+/* ---- 33e. Nama member di halaman profil
+   brutal.css:2054 memaksa .member-name jadi putih 12px (untuk kartu member
+   berwarna). Di halaman profil latarnya terang, jadi namanya tak terlihat.
+   Scope-nya dibatasi ke .left-panel (member.html) dan anak langsung
+   #container (riwayat.html) supaya kartu birthday/graduation tidak rusak. ---- */
+.left-panel .member-name,
+#container > .member-info .member-name{
+  color:var(--text)!important;
+}
+@media (max-width:600px){
+  .left-panel .member-name,
+  #container > .member-info .member-name{
+    font-size:17px!important;
+    text-align:left!important;
+    line-height:1.25!important;
+  }
+}
+
+/* ---- 33f. riwayat.html punya DUA baris filter (satu di .member-info untuk
+   mobile, satu di .content untuk desktop). Di HP keduanya muncul =>
+   dobel. Sembunyikan yang di .content. ---- */
+@media (max-width:1024px){
+  .content .filter-section{display:none!important}
+}
+
 

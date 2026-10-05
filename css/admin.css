@@ -221,7 +221,11 @@ body.dark .bar{background:rgba(255,255,255,0.2)}
 .admin-controls button:active{transform:translate(1px,1px)!important;box-shadow:1px 1px 0 rgba(0,0,0,0.45)!important;filter:brightness(0.9)}
 .admin-controls button:disabled{transform:none!important;box-shadow:2px 2px 0 rgba(0,0,0,0.35)!important;filter:grayscale(0.5);opacity:0.5}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:999;padding:20px;backdrop-filter:blur(8px)}
-body.modal-open{overflow:hidden;touch-action:none}
+/* Kunci scroll halaman di belakang modal.
+   JANGAN pakai touch-action:none di sini — properti itu diwarisi ke semua
+   descendant sehingga modalnya sendiri jadi tidak bisa di-scroll dengan
+   sentuhan di HP.overflow:hidden saja sudah cukup. */
+body.modal-open{overflow:hidden}
 .modal-box{background:#111827;padding:28px;border-radius:20px;width:90%;max-width:380px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.5);position:relative;scrollbar-width:none;-ms-overflow-style:none}
 .modal-box::-webkit-scrollbar{display:none}
 /* Hide scrollbar semua area scroll di dalam modal */
