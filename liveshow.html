@@ -91,8 +91,57 @@
     gap:8px!important;
   }
   body.page-liveshow .member-info{padding:6px 3px 7px!important;gap:3px!important}
-  body.page-liveshow .member-name{font-size:9.5px!important;line-height:1.25!important;min-height:24px!important}
-  body.page-liveshow .members-section{padding:10px 8px!important}
+
+  /* brutal.css:2293-2320 mengubah .member-info jadi
+     `display:grid; grid-template-columns:auto minmax(0,1fr)`. Aturan itu
+     untuk header member di riwayat.html, tapi bocor ke kartu member
+     liveshow. Akibatnya .member-name dapat lebar 0px dan teksnya jadi
+     satu huruf per baris (tinggi 71px) sehingga nama tidak terlihat sama
+     sekali. Kartu dikembalikan ke flow flex kolom. */
+  body.page-liveshow .member-card .member-info{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    gap:3px!important;
+  }
+  body.page-liveshow .member-card .member-name{
+    grid-column:auto!important;
+    grid-row:auto!important;
+  }
+
+  /* Nama member: pada kolom 4 (lebar ~88px) .member-name ikut menyusut
+     jadi 0px karena align-items:center + display:-webkit-box, jadi
+     namanya hilang sama sekali. Dilepas dari -webkit-box dan diberi
+     lebar penuh. */
+  body.page-liveshow .member-name{
+    display:block!important;
+    -webkit-line-clamp:unset!important;
+    -webkit-box-orient:initial!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    font-size:9.5px!important;
+    line-height:1.25!important;
+    letter-spacing:0!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    margin-bottom:0!important;
+  }
+
+  /* Chip "Gen 6 • Dream": brutal.css:2074 memakai white-space:nowrap,
+     sedangkan kolom 4 hanya ~88px sehingga teksnya terpotong
+     ("Gen 6 • Dre"). Dibuat ringkas dan boleh membungkus. */
+  body.page-liveshow .member-gen{
+    width:100%!important;
+    font-size:7.5px!important;
+    letter-spacing:0!important;
+    padding:1px 2px!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+    border-width:1px!important;
+    box-shadow:1px 1px 0 rgba(0,0,0,.45)!important;
+    overflow-wrap:anywhere!important;
+  }
 }
 @media (max-width:360px){
   body.page-liveshow .members-grid{gap:6px!important}

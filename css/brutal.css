@@ -1759,14 +1759,19 @@ body.dark .show-card-members p{background:#1f1f25!important}
    and the text is always readable.
    ========================================================= */
 .detail-footer{
-  max-height:0;
-  overflow:hidden;
   opacity:0;
   visibility:hidden;
-  padding-top:0!important;
-  padding-bottom:0!important;
-  border-top-width:0!important;
-  transition:max-height .28s ease,opacity .28s ease,padding .28s ease,border-color .28s ease,visibility .28s;
+  transform:translateY(6px);
+  /* PENTING: jangan memakai max-height / padding untuk memunculkan
+     footer. utils.js men-toggle .is-visible dari scroll handler, jadi
+     setiap perubahan tinggi footer mengubah tinggi halaman -> posisi
+     scroll bergeser -> ResizeObserver(body) memicu update lagi ->
+     class toggle lagi. Di HP hasilnya halaman "mantal-mantal"/
+     berkedip saat scroll. Footer sekarang selalu memakai ruangnya,
+     hanya opacity/visibility yang berubah. */
+  max-height:none;
+  overflow:visible;
+  transition:opacity .25s ease,transform .25s ease,visibility .25s,border-color .28s ease;
   background:var(--surface)!important;
   color:var(--muted)!important;
   border-top:4px solid var(--ink)!important;
@@ -1775,12 +1780,9 @@ body.dark .show-card-members p{background:#1f1f25!important}
   letter-spacing:.4px;
 }
 .detail-footer.is-visible{
-  max-height:90px;
   opacity:1;
   visibility:visible;
-  padding-top:14px!important;
-  padding-bottom:14px!important;
-  border-top-width:4px!important;
+  transform:none;
 }
 .detail-footer p{color:inherit!important}
 body.dark .detail-footer{
