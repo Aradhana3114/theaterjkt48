@@ -1,5 +1,5 @@
-var SUPABASE_URL='https://pprxfopqkvpeajeoxzig.supabase.co';
-var SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwcnhmb3Bxa3ZwZWFqZW94emlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNTI4MTIsImV4cCI6MjA4MTgyODgxMn0.iXRO_dAHhtVHRLqGTresG_63RD2zIaopNXtXYNfthdg';
+var SUPABASE_URL='https://hypbqiyrxubbvpisgjhq.supabase.co';
+var SUPABASE_KEY='sb_publishable_pD27IltTJKOW_mpglb9o2A_S6sMYmY9';
 // SECURITY: hardcoded ADMIN_ACCOUNTS removed — login now goes through real Supabase Auth
 // (supabase.auth.signInWithPassword). Create admin users in the Supabase Dashboard under
 // Authentication → Users, not in this file. See SECURITY REPORT for the RLS policies that

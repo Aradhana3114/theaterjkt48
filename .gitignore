@@ -4,3 +4,4 @@
 .agents/
 .aider-desk/
 skills-lock.json
+supabase-schema.sql
