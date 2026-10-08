@@ -165,7 +165,10 @@ html,body{overflow-x:hidden;overflow-x:clip}
    di-scroll dari atas (sebelumnya `height:100%` + panel `overflow:hidden`
    membuat baris statistik terpotong). `margin:auto` dipakai supaya tetap
    ter-center saat isinya pendek, tanpa clipping saat isinya panjang. */
-#loginModal{display:flex!important;overflow-y:auto!important}
+/* JANGAN pakai display:flex!important di sini — itu mengalahkan inline
+   style JS (loginModal.style.display='none'), jadi form tidak pernah hilang.
+   Visibility tetap dikendalikan admin.css (#loginModal{display:none}) + JS. */
+#loginModal{overflow-y:auto!important}
 #loginModal .login-desktop-card{
   height:auto!important;
   max-height:none!important;
