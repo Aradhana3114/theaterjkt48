@@ -332,7 +332,7 @@ function renderPage(showData, showTime, isBirthdayShow, birthdayMember, isGradua
   document.getElementById('container').innerHTML = `
     <div class="show-content-wrapper">
       <div class="show-left-panel">
-        <div class="live-show-header ${headerClass}${lightText ? ' on-light' : ''}" style="background:${status === 'LIVE' ? 'linear-gradient(135deg, #e60012 0%, #a00010 100%)' : status === 'FINISHED' ? 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)' : (getSetlistGradient(SETLIST_NAME, isNonShow) || 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)')}">
+        <div class="live-show-header ${headerClass}${lightText ? ' on-light' : ''}" style="background:${status === 'LIVE' ? '#e60012' : status === 'FINISHED' ? '#6b7280' : (getSetlistGradient(SETLIST_NAME, isNonShow) || '#2563eb')}">
           ${bannerHTML}
           <h1>${escapeHtml(displayTitle)}</h1>
           ${specialBadges}

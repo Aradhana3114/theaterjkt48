@@ -88,7 +88,7 @@ body.dark .container{background:transparent;box-shadow:none}
 }
 
 /* main-content: default block (vertikal) */
-.main-content { display: block; }
+.main-content { display: block;}
 
 /* PANEL KIRI: default normal flow */
 .left-panel{
@@ -145,7 +145,7 @@ body.dark .progress-bar-container{background:#374151}
   height:100%;background:var(--gen-color);border-radius:6px;
   transition:width 1s cubic-bezier(0.4,0,0.2,1);position:relative;overflow:hidden;
 }
-.progress-bar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.28) 50%,transparent 100%);animation:pgshimmer 1.8s infinite}
+.progress-bar-fill::after{content:none}
 @keyframes pgshimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 .progress-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:8px;font-weight:600;color:#6b7280;z-index:10}
 body.dark .progress-text{color:#9ca3af}
@@ -309,7 +309,7 @@ body.dark .skeleton-info{background:#374151}
 .loading{text-align:center;padding:80px 20px;color:#6b7280;display:flex;align-items:center;justify-content:center;gap:8px}
 
 @keyframes spin{to{transform:rotate(360deg)}}
-.spinner{display:inline-block;width:20px;height:20px;border:3px solid rgba(0,0,0,0.1);border-top-color:#9ca3af;border-radius:50%;animation:spin 0.8s linear infinite}
+.spinner{display:inline-block;width:20px;height:20px;border:1.5px solid rgba(23,23,31,.14);border-top-color:#9ca3af;border-radius:50%;animation:spin 0.8s linear infinite}
 body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
 
 /* =============================================
@@ -317,14 +317,14 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
    ============================================= */
 @media (max-width: 480px) {
   .main-header{position:sticky;top:0}
-  .container{ max-width:100%; margin:0; }
-  .container-header{ padding:10px 14px; }
-  .container-header .profile-title{ font-size:14px; }
-  .container-header .show-history-btn{ width:30px;height:30px; }
-  .container-header .show-history-btn svg{ width:15px;height:15px; }
-  .left-panel, .right-panel{ margin:0 16px 20px; }
-  .member-name{ font-size:20px;margin:10px 0 16px; }
-  .left-panel .panel-title,.right-panel .panel-title,.social-title{ font-size:15px;margin-bottom:10px;padding-bottom:6px; }
+  .container{ max-width:100%; margin:0;}
+  .container-header{ padding:10px 14px;}
+  .container-header .profile-title{ font-size:14px;}
+  .container-header .show-history-btn{ width:30px;height:30px;}
+  .container-header .show-history-btn svg{ width:15px;height:15px;}
+  .left-panel, .right-panel{ margin:0 16px 20px;}
+  .member-name{ font-size:20px;margin:10px 0 16px;}
+  .left-panel .panel-title,.right-panel .panel-title,.social-title{ font-size:15px;margin-bottom:10px;padding-bottom:6px;}
   .info-row{padding:8px 0}
   .info-label{font-size:12px;width:90px}
   .info-value{font-size:12px}
@@ -345,12 +345,12 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
    ============================================= */
 @media (min-width:481px) and (max-width:768px) and (orientation:portrait) {
   .main-header{position:sticky;top:0}
-  .container{ max-width:600px; margin:0 auto; }
-  .container-header{ padding:13px 22px; }
-  .container-header .profile-title{ font-size:16px; }
-  .left-panel, .right-panel{ margin:0 22px 22px; }
-  .photo,.photo-error{ width:150px;height:210px; }
-  .member-name{ font-size:22px; }
+  .container{ max-width:600px; margin:0 auto;}
+  .container-header{ padding:13px 22px;}
+  .container-header .profile-title{ font-size:16px;}
+  .left-panel, .right-panel{ margin:0 22px 22px;}
+  .photo,.photo-error{ width:150px;height:210px;}
+  .member-name{ font-size:22px;}
   .info-label{font-size:13px;width:100px}
   .info-value{font-size:13px}
 }
@@ -360,8 +360,8 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
    Kiri: NON-SCROLL | Kanan: SCROLL | Full layar
    ============================================= */
 @media (min-width:601px) and (max-width:1024px) and (orientation:landscape) {
-  html, body{ overflow:hidden !important; height:100vh !important; padding:0 !important; }
-  .main-header{ position:fixed !important; top:0;left:0;right:0;z-index:1001; }
+  html, body{ overflow:hidden !important; height:100vh !important; padding:0 !important;}
+  .main-header{ position:fixed !important; top:0;left:0;right:0;z-index:1001;}
 
   .container{
     position:fixed !important;
@@ -376,11 +376,11 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
     box-shadow:none !important;
     display:flex !important;
     flex-direction:column !important;
-  }
-  body.dark .container{ background:rgba(17,24,39,0.88) !important; }
+}
+  body.dark .container{ background:rgba(17,24,39,0.88) !important;}
 
-  .container-header{ padding:11px 22px;flex-shrink:0; }
-  .container-header .profile-title{ font-size:15px; }
+  .container-header{ padding:11px 22px;flex-shrink:0;}
+  .container-header .profile-title{ font-size:15px;}
 
   .main-content{
     display:flex !important;
@@ -388,7 +388,7 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
     flex:1;
     min-height:0;
     overflow:hidden;
-  }
+}
 
   /* Panel kiri: NON-SCROLL */
   .left-panel{
@@ -404,19 +404,19 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
     padding:18px 14px !important;
     margin:0 !important;
     flex-shrink:0;
-  }
-  body.dark .left-panel{ background:#0d1425;border-right-color:#374151; }
+}
+  body.dark .left-panel{ background:#0d1425;border-right-color:#374151;}
 
-  .photo-container{ margin:0 0 10px 0;flex-shrink:0; }
-  .photo,.photo-error{ width:115px;height:161px; }
-  .member-name{ font-size:14px;margin:6px 0 12px;flex-shrink:0; }
-  .left-panel .panel-title{ font-size:12px;margin-bottom:8px;padding-bottom:6px;width:100%;flex-shrink:0; }
-  .milestone-card{ width:100%;flex-shrink:0; }
-  .milestone-title{ font-size:9px; }
-  .milestone-target{ font-size:12px; }
-  .progress-bar-container{ height:11px;margin-bottom:5px; }
-  .progress-text{ font-size:8px; }
-  .progress-info{ font-size:8px; }
+  .photo-container{ margin:0 0 10px 0;flex-shrink:0;}
+  .photo,.photo-error{ width:115px;height:161px;}
+  .member-name{ font-size:14px;margin:6px 0 12px;flex-shrink:0;}
+  .left-panel .panel-title{ font-size:12px;margin-bottom:8px;padding-bottom:6px;width:100%;flex-shrink:0;}
+  .milestone-card{ width:100%;flex-shrink:0;}
+  .milestone-title{ font-size:9px;}
+  .milestone-target{ font-size:12px;}
+  .progress-bar-container{ height:11px;margin-bottom:5px;}
+  .progress-text{ font-size:8px;}
+  .progress-info{ font-size:8px;}
 
   /* Panel kanan: SCROLL */
   .right-panel{
@@ -429,15 +429,15 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
     padding:18px 22px !important;
     margin:0 !important;
     -webkit-overflow-scrolling:touch;
-  }
-  body.dark .right-panel{ background:rgba(17,24,39,0.88); }
-  .right-panel .panel-title{ font-size:15px;margin-bottom:12px; }
-  .info-row{ padding:8px 0; }
-  .info-label{ font-size:12px;width:105px; }
-  .info-value{ font-size:12px; }
-  .social-icon{ width:34px;height:34px;border-radius:8px; }
-  .social-name{ font-size:12px; }
-  .social-handle{ font-size:10px; }
+}
+  body.dark .right-panel{ background:rgba(17,24,39,0.88);}
+  .right-panel .panel-title{ font-size:15px;margin-bottom:12px;}
+  .info-row{ padding:8px 0;}
+  .info-label{ font-size:12px;width:105px;}
+  .info-value{ font-size:12px;}
+  .social-icon{ width:34px;height:34px;border-radius:8px;}
+  .social-name{ font-size:12px;}
+  .social-handle{ font-size:10px;}
 }
 
 /* =============================================
@@ -445,14 +445,14 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
    Kiri: NON-SCROLL | Kanan: SCROLL | Full layar
    ============================================= */
 @media (min-width:1025px) {
-  html, body{ overflow:hidden !important; height:100vh !important; padding:0 !important; }
-  .main-header{ position:fixed !important; top:0;left:0;right:0;z-index:1001; }
-  .header-top-bar{ padding:8px 40px; }
-  .header-top-title{ font-size:15px; }
-  .detail-header{ background:rgba(255,255,255,0.88);padding:14px 40px; }
-  body.dark .detail-header{ background:rgba(17,24,39,0.88) !important;border-color:#1f2937 !important; }
-  .back-btn{ font-size:16px; }
-  .detail-title{ font-size:18px; }
+  html, body{ overflow:hidden !important; height:100vh !important; padding:0 !important;}
+  .main-header{ position:fixed !important; top:0;left:0;right:0;z-index:1001;}
+  .header-top-bar{ padding:8px 40px;}
+  .header-top-title{ font-size:15px;}
+  .detail-header{ background:rgba(255,255,255,0.88);padding:14px 40px;}
+  body.dark .detail-header{ background:rgba(17,24,39,0.88) !important;border-color:#1f2937 !important;}
+  .back-btn{ font-size:16px;}
+  .detail-title{ font-size:18px;}
 
   .container{
     position:fixed !important;
@@ -467,13 +467,13 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
     box-shadow:none !important;
     display:flex !important;
     flex-direction:column !important;
-  }
-  body.dark .container{ background:rgba(17,24,39,0.88) !important; }
+}
+  body.dark .container{ background:rgba(17,24,39,0.88) !important;}
 
-  .container-header{ padding:15px 40px;flex-shrink:0; }
-  .container-header .profile-title{ font-size:20px; }
-  .container-header .show-history-btn{ width:42px;height:42px; }
-  .container-header .show-history-btn svg{ width:20px;height:20px; }
+  .container-header{ padding:15px 40px;flex-shrink:0;}
+  .container-header .profile-title{ font-size:20px;}
+  .container-header .show-history-btn{ width:42px;height:42px;}
+  .container-header .show-history-btn svg{ width:20px;height:20px;}
 
   .main-content{
     display:flex !important;
@@ -481,7 +481,7 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
     flex:1;
     min-height:0;
     overflow:hidden;
-  }
+}
 
   /* Panel kiri: NON-SCROLL */
   .left-panel{
@@ -497,19 +497,19 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
     padding:36px 28px !important;
     margin:0 !important;
     flex-shrink:0;
-  }
-  body.dark .left-panel{ background:#0d1425;border-right-color:#374151; }
+}
+  body.dark .left-panel{ background:#0d1425;border-right-color:#374151;}
 
-  .photo-container{ margin:0 0 14px 0;flex-shrink:0; }
-  .photo,.photo-error{ width:155px;height:216px; }
-  .member-name{ font-size:21px;margin:10px 0 22px;flex-shrink:0; }
-  .left-panel .panel-title{ font-size:17px;margin-bottom:14px;padding-bottom:10px;width:100%;flex-shrink:0; }
-  .milestone-card{ width:100%;flex-shrink:0; }
-  .milestone-title{ font-size:12px; }
-  .milestone-target{ font-size:15px; }
-  .progress-bar-container{ height:16px;border-radius:8px;margin-bottom:7px; }
-  .progress-text{ font-size:10px; }
-  .progress-info{ font-size:10px; }
+  .photo-container{ margin:0 0 14px 0;flex-shrink:0;}
+  .photo,.photo-error{ width:155px;height:216px;}
+  .member-name{ font-size:21px;margin:10px 0 22px;flex-shrink:0;}
+  .left-panel .panel-title{ font-size:17px;margin-bottom:14px;padding-bottom:10px;width:100%;flex-shrink:0;}
+  .milestone-card{ width:100%;flex-shrink:0;}
+  .milestone-title{ font-size:12px;}
+  .milestone-target{ font-size:15px;}
+  .progress-bar-container{ height:16px;border-radius:8px;margin-bottom:7px;}
+  .progress-text{ font-size:10px;}
+  .progress-info{ font-size:10px;}
 
   /* Panel kanan: SCROLL */
   .right-panel{
@@ -522,20 +522,20 @@ body.dark .spinner{border-color:rgba(255,255,255,0.1);border-top-color:#9ca3af}
     padding:36px 48px !important;
     margin:0 !important;
     -webkit-overflow-scrolling:touch;
-  }
-  body.dark .right-panel{ background:rgba(17,24,39,0.88); }
-  .right-panel .panel-title{ font-size:20px;margin-bottom:18px;padding-bottom:12px; }
-  .info-row{ padding:13px 0; }
-  .info-label{ font-size:14px;width:135px; }
-  .info-value{ font-size:14px; }
-  .social-section{ margin-top:24px; }
-  .social-title{ font-size:20px;margin-bottom:14px;padding-bottom:12px; }
-  .social-link{ padding:11px 0; }
-  .social-icon{ width:42px;height:42px;border-radius:11px; }
-  .social-icon svg{ width:20px;height:20px; }
-  .social-name{ font-size:14px; }
-  .social-handle{ font-size:12px; }
-  .social-arrow{ font-size:16px; }
+}
+  body.dark .right-panel{ background:rgba(17,24,39,0.88);}
+  .right-panel .panel-title{ font-size:20px;margin-bottom:18px;padding-bottom:12px;}
+  .info-row{ padding:13px 0;}
+  .info-label{ font-size:14px;width:135px;}
+  .info-value{ font-size:14px;}
+  .social-section{ margin-top:24px;}
+  .social-title{ font-size:20px;margin-bottom:14px;padding-bottom:12px;}
+  .social-link{ padding:11px 0;}
+  .social-icon{ width:42px;height:42px;border-radius:11px;}
+  .social-icon svg{ width:20px;height:20px;}
+  .social-name{ font-size:14px;}
+  .social-handle{ font-size:12px;}
+  .social-arrow{ font-size:16px;}
 }
 /* Skeleton dark mode */
 body.dark .skeleton-header,

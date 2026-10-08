@@ -31,24 +31,20 @@
   body.page-liveshow .show-left-panel{
     height:auto!important;
     min-height:0!important;
-    overflow:visible!important;
-  }
+    overflow:visible!important;}
   body.page-liveshow .live-show-header{
     height:auto!important;
     min-height:0!important;
-    overflow:visible!important;
-  }
+    overflow:visible!important;}
   body.page-liveshow .setlist-banner-container{
     flex:0 0 auto!important;
     height:auto!important;
     min-height:0!important;
     overflow:hidden!important;
-    margin-bottom:10px!important;
-  }
+    margin-bottom:10px!important;}
   body.page-liveshow .banner-fallback{
     flex:0 0 auto!important;
-    height:auto!important;
-  }
+    height:auto!important;}
   /* Banner dipotong jadi rasio 16:9 supaya tidak ada area kosong,
      persis seperti grid card member di halaman utama. */
   body.page-liveshow .setlist-banner{
@@ -59,9 +55,8 @@
     aspect-ratio:16/9!important;
     object-fit:cover!important;
     object-position:center 22%!important;
-    border-radius:10px!important;
-    margin:0 auto!important;
-  }
+    border-radius:0!important;
+    margin:0 auto!important;}
 }
 
 /* --- 1b. Laptop: banner isi penuh panel, jangan ada pita pink ---
@@ -78,8 +73,7 @@
     max-height:none!important;
     object-fit:cover!important;
     object-position:center 22%!important;
-    border-radius:10px!important;
-  }
+    border-radius:0!important;}
 }
 
 /* --- 2. Grid member 4 kolom di HP --------------------------------
@@ -88,8 +82,7 @@
 @media (max-width:767px){
   body.page-liveshow .members-grid{
     grid-template-columns:repeat(4,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
+    gap:8px!important;}
   body.page-liveshow .member-info{padding:6px 3px 7px!important;gap:3px!important}
 
   /* brutal.css:2293-2320 mengubah .member-info jadi
@@ -102,12 +95,10 @@
     display:flex!important;
     flex-direction:column!important;
     align-items:center!important;
-    gap:3px!important;
-  }
+    gap:3px!important;}
   body.page-liveshow .member-card .member-name{
     grid-column:auto!important;
-    grid-row:auto!important;
-  }
+    grid-row:auto!important;}
 
   /* Nama member: pada kolom 4 (lebar ~88px) .member-name ikut menyusut
      jadi 0px karena align-items:center + display:-webkit-box, jadi
@@ -125,8 +116,7 @@
     letter-spacing:0!important;
     white-space:normal!important;
     overflow-wrap:anywhere!important;
-    margin-bottom:0!important;
-  }
+    margin-bottom:0!important;}
 
   /* Chip "Gen 6 • Dream": brutal.css:2074 memakai white-space:nowrap,
      sedangkan kolom 4 hanya ~88px sehingga teksnya terpotong
@@ -139,9 +129,8 @@
     line-height:1.15!important;
     white-space:normal!important;
     border-width:1px!important;
-    box-shadow:1px 1px 0 rgba(0,0,0,.45)!important;
-    overflow-wrap:anywhere!important;
-  }
+    box-shadow:0 1px 2px rgba(23,23,31,.08)!important;
+    overflow-wrap:anywhere!important;}
 }
 @media (max-width:360px){
   body.page-liveshow .members-grid{gap:6px!important}

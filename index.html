@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <link rel="icon" type="image/png" href="img/favicon-theater-jkt48.png">
-<meta charset="UTF-8">
+<meta charset="UTF-8">  
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JKT48 Show Theater</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -25,8 +25,7 @@
    isi tombol rata tengah. */
 @media (max-width:600px){
   .filter-row{
-    gap:6px!important;
-  }
+    gap:6px!important;}
   .filter-row>*{
     min-height:0!important;
     padding:7px 5px!important;
@@ -35,18 +34,15 @@
     letter-spacing:0!important;
     border-radius:6px!important;
     text-align:center!important;
-    justify-self:center!important;
-  }
+    justify-self:center!important;}
   .filter-section-title{font-size:9px!important;margin-bottom:6px!important}
 
   /* "CARI GENERASI": 1 tombol -> 1 kolom penuh, teks center. */
   .filters .filter-section:first-child .filter-row{
-    grid-template-columns:1fr!important;
-  }
+    grid-template-columns:1fr!important;}
   /* "FILTER TEAM": 3 tombol -> 3 kolom sebaris, groupnya rata. */
   .filters .filter-section:last-child .filter-row{
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  }
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;}
 }
 </style>
 </head>

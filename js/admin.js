@@ -1937,6 +1937,8 @@ async function saveEditShow() {
         
         // Tampilkan notifikasi sukses
         var oldMemberName = currentEditShowData.members ? currentEditShowData.members.name : 'Unknown';
+        // selectedMember tidak pernah ada di scope fungsi ini — pakai lookup dari memberId
+        var selectedMember = members.find(function(m){ return String(m.id) === String(memberId); });
         var newMemberName = selectedMember ? selectedMember.name : 'Unknown';
         
         var message = memberChanged

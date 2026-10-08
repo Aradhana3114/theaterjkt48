@@ -355,10 +355,10 @@ function renderShows(date) {
         const timeParam = encodeURIComponent(show.time);
         const slColor = show.is_non_show ? '#22c55e' : getSetlistColor(show.setlist);
         const bgStyle = status === 'LIVE'
-            ? 'linear-gradient(135deg, #e60012 0%, #a00010 100%)'
+            ? '#e60012'
             : status === 'FINISHED'
-                ? 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'
-                : (getSetlistGradient(show.setlist, show.is_non_show) || 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)');
+                ? '#6b7280'
+                : (getSetlistGradient(show.setlist, show.is_non_show) || '#2563eb');
         // dark text on light setlists so the header stays readable
         const lightText = status === 'UPCOMING' && isLightColor(slColor);
 
